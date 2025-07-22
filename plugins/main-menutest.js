@@ -18,18 +18,18 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
 
     // Tags y nombres para secciones
     let tags = {
-      'main': 'ℹ️ Información',
-      'search': '🔍 Búsquedas',
-      'downloader': '📥 Descargas',
-      'economy': '💰 Economía',
-      'gacha': '🎁 Gacha',
-      'sticker': '🏞 Stickers',
-      'tools': '🛠 Herramientas',
-      'profile': '👤 Perfil',
-      'group': '👥 Grupos',
-      'anime': '🌸 Anime',
-      'nsfw': '🔞 NSFW',
-      'game': '🎮 Juegos'
+      'main': 'ℹ✦ Información',
+      'search': '✦ Búsquedas',
+      'downloader': '✦ Descargas',
+      'economy': '✦ Economía',
+      'gacha': '✦ Gacha',
+      'sticker': '✦ Stickers',
+      'tools': '✦ Herramientas',
+      'profile': '✦ Perfil',
+      'group': '✦ Grupos',
+      'anime': '✦ Anime',
+      'nsfw': '✦ NSFW',
+      'game': '✦ Juegos'
     }
 
     let help = Object.values(global.plugins)
@@ -42,8 +42,8 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
         }
       })
 
-    let menuText = `Hola! Soy *${botname}* (｡•̀ᴗ-)✧
-Aquí tienes la lista de comandos
+    let menuText = `Hola! Soy *${botname}* ꉂ(ˊᗜˋ*)♡
+Aquí tienes la lista de comandos 
 ╭┈ ↷
 │ᰔᩚ Cliente » @${userId.split('@')[0]}
 │❀ Modo » ${mode}
@@ -55,7 +55,7 @@ Aquí tienes la lista de comandos
 │🜸 Baileys » Multi Device
 ╰─────────────────
 
-• :･ﾟ⊹˚• 『 Comandos 』 •˚⊹:･ﾟ•
+• :ﾟ⊹˚• 〔 Comandos 〕 •˚:･ﾟ•
 `
 
     for (let tag of Object.keys(tags)) {
