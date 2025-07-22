@@ -20,7 +20,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
     let tags = {
       'main': 'ℹ✦ Información',
       'search': '✦ Búsquedas',
-      'downloader': '✦ Descargas',
+      'descargas': '✦ Descargas',
       'economy': '✦ Economía',
       'gacha': '✦ Gacha',
       'sticker': '✦ Stickers',
