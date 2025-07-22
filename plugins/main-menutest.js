@@ -73,7 +73,7 @@ Aquí tienes la lista de comandos
 
 handler.help = ['menu']
 handler.tags = ['main']
-handler.command = ['menu', 'help', 'menú', 'comandos', 'allmenu']
+handler.command = ['menuts']
 
 export default handler
 
