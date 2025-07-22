@@ -1,3 +1,4 @@
+import fetch from 'node-fetch'
 import { xpRange } from '../lib/levelling.js'
 
 let handler = async (m, { conn, usedPrefix: _p }) => {
@@ -8,12 +9,14 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
     let _uptime = process.uptime() * 1000
     let uptime = clockString(_uptime)
     let totalreg = Object.keys(global.db.data.users).length
-    let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
+    let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags && !v.disabled).length
     let isPrincipal = (conn.user?.id || '').split(':')[0].replace(/\D/g, '') === '50494547493'
     let botType = isPrincipal ? 'Principal 🅥' : 'Sub Bot 🅑'
     let moneda = global.db.data.settings.moneda || '💰'
+    let mode = global.opts['self'] ? 'Privado' : 'Público'
+    let ping = Math.floor(conn.ws.ping)
 
-    // Construir menú dinámico con tags
+    // Tags y nombres para secciones
     let tags = {
       'main': 'ℹ️ Información',
       'search': '🔍 Búsquedas',
@@ -43,11 +46,12 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
 Aquí tienes la lista de comandos
 ╭┈ ↷
 │ᰔᩚ Cliente » @${userId.split('@')[0]}
-│❀ Modo » Público
+│❀ Modo » ${mode}
 │✦ Bot » ${botType}
-│ⴵ Activada » ${uptime}
+│ⴵ Activado » ${uptime}
 │✰ Usuarios » ${totalreg}
 │✧ Comandos » ${totalCommands}
+│⏱ Ping » ${ping}ms
 │🜸 Baileys » Multi Device
 ╰─────────────────
 
@@ -56,14 +60,31 @@ Aquí tienes la lista de comandos
 
     for (let tag of Object.keys(tags)) {
       let comandos = help.filter(menu => menu.tags && menu.tags.includes(tag) && menu.help)
-        .map(menu => menu.help.map(cmd => `${_p + cmd}`).join('\n')).join('\n')
+        .map(menu => menu.help.map(cmd => `${_p}${cmd}`).join('\n')).join('\n')
 
       if (comandos.trim()) {
         menuText += `\n*${tags[tag]}*\n${comandos}\n`
       }
     }
 
-    await conn.sendMessage(m.chat, { text: menuText, mentions: [userId] }, { quoted: m })
+    await conn.sendMessage(m.chat, {
+      text: menuText,
+      mentions: [userId],
+      contextInfo: {
+        mentionedJid: [userId],
+        externalAdReply: {
+          title: botname,
+          body: textbot,
+          mediaType: 1,
+          mediaUrl: redes,
+          sourceUrl: redes,
+          thumbnail: await (await fetch(banner)).buffer(),
+          showAdAttribution: false,
+          containsAutoReply: true,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: m })
 
   } catch (e) {
     conn.reply(m.chat, 'Lo sentimos, ocurrió un error generando el menú.', m)
@@ -81,5 +102,5 @@ function clockString(ms) {
   let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
   let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
   let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-  return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
+  return `${h}h ${m}m ${s}s`
 }
