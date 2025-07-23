@@ -22,7 +22,7 @@ Aquí tienes la lista de comandos
 
 • :･ﾟ⊹˚• \`【 Info-Bot 】\` •˚⊹:･ﾟ•
 
-✦ Comandos para ver estado e información de la Bot.
+✦ Comandos para ver estado e información del Bot.
 ✰ *#help • #menu*
 > ✰ Ver la lista de comandos del Bot.
 ✰ *#uptime • #runtime*
