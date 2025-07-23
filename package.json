@@ -1,5 +1,5 @@
 {
-"name": "YukiBot-MD",
+"name": "MichBot-MD",
 "version": "2.2.5",
 "description": "WhatsApp Bot Multi Device",
 "main": "index.js",
@@ -18,16 +18,16 @@
 "eslint": "eslint .",
 "eslintfix": "eslint --fix ."
 },
-"homepage": "https://github.com/The-King-Destroy/Yuki_Suou-Bot",
+"homepage": "https://github.com/Ado-rgb/Michi",
 "author": {
-"name": "The-King-Destroy"
+"name": "Ado-rgb"
 },
 "repository": {
 "type": "git",
-"url": "git+https://github.com/The-King-Destroy/Yuki_Suou-Bot.git"
+"url": "git+https://github.com/Ado-rgb/Michi.git"
 },
 "bugs": {
-"url": "https://github.com/The-King-Destroy/Yuki_Suou-Bot/issues"
+"url": "https://github.com/Ado-rgb/Michi/issues"
 },
 "license": "MIT-License",
 "dependencies": {
