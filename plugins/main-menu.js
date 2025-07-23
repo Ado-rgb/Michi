@@ -488,7 +488,7 @@ Aquí tienes la lista de comandos
 > ✐ Hacer tijeras.
 
 ---
-## • :･ﾟ⊹˚• `【 Juegos 】` •˚⊹:･ﾟ•
+## • :･ﾟ⊹˚• 【 Juegos 】 •˚⊹:･ﾟ•
 ---
 ✦ Comandos de juegos para jugar con tus amigos.
 > » *#amistad • #amigorandom*
