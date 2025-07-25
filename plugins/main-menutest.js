@@ -36,7 +36,13 @@ let handler = async (m, { conn }) => {
   let name = m.pushName || m.sender.split('@')[0]
   let prefix = (global.prefix && global.prefix[0]) ? global.prefix[0] : '.'
 
-  let menu = `> Hola @${name}, Soy *${global.botname}*\n\n`
+  // detectar si es bot principal o subbot
+  let tipoBot = conn.user?.id?.split(':')[0] === global.conn?.user?.id?.split(':')[0] 
+    ? '*BOT PRINCIPAL*'
+    : '*SUBBOT*'
+
+  let menu = `> Hola @${name}, Soy *${global.botname}*\n`
+  menu += `${tipoBot}\n\n`
 
   // agrupar comandos por tags
   let groups = {}
@@ -63,7 +69,7 @@ let handler = async (m, { conn }) => {
     text: menu,
     contextInfo: {
       mentionedJid: [m.sender],
-      forwardingScore: 999, // número alto para que aparezca "Reenviado muchas veces"
+      forwardingScore: 999,
       isForwarded: true,
       externalAdReply: {                
         title: global.botname,
