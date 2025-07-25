@@ -24,23 +24,24 @@ const handler = async (m, { conn, text, command }) => {
     let { title, thumbnail, url } = ytplay2
     const thumb = (await conn.getFile(thumbnail)).data
 
-    // Mensaje con miniatura y botón "Unirme al grupo"
+    // Mensaje decorado con miniatura y botón "Unirme al grupo"
     await conn.sendMessage(m.chat, {
       text: `✅ *Subida exitosa*\n${title}`,
       contextInfo: {
         externalAdReply: {
-          title: "Únete a nuestra comunidad",
+          title: title,
           body: "Haz clic en Unirme al grupo",
-          thumbnail: thumb,
           mediaType: 1,
+          thumbnail: thumb,
           renderLargerThumbnail: true,
-          sourceUrl: "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c" // enlace real pero no visible
+          mediaUrl: "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c",
+          sourceUrl: "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c"
         }
       }
     }, { quoted: m })
 
     // Enviar el archivo según comando
-    if (['pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
+    if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
       const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
       if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar el enlace de audio.')
       await conn.sendMessage(m.chat, { audio: { url: api.result.download.url }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
@@ -58,7 +59,7 @@ const handler = async (m, { conn, text, command }) => {
   }
 }
 
-handler.command = handler.help = ['pl']
+handler.command = handler.help = ['play', 'pl']
 handler.tags = ['descargas']
 handler.group = true
 
