@@ -6,85 +6,70 @@ const haremFilePath = './src/database/harem.json'
 const cooldowns = {}
 
 async function loadCharacters() {
-    try {
-        const data = await fs.readFile(charactersFilePath, 'utf-8')
-        return JSON.parse(data)
-    } catch (error) {
-        throw new Error('❀ No se pudo cargar el archivo characters.json.')
-    }
-}
-
-async function saveCharacters(characters) {
-    try {
-        await fs.writeFile(charactersFilePath, JSON.stringify(characters, null, 2), 'utf-8')
-    } catch (error) {
-        throw new Error('❀ No se pudo guardar el archivo characters.json.')
-    }
+  try {
+    const data = await fs.readFile(charactersFilePath, 'utf-8')
+    return JSON.parse(data)
+  } catch (e) {
+    throw new Error('❀ No se pudo cargar characters.json.')
+  }
 }
 
 async function loadHarem() {
-    try {
-        const data = await fs.readFile(haremFilePath, 'utf-8')
-        return JSON.parse(data)
-    } catch (error) {
-        return []
-    }
-}
-
-async function saveHarem(harem) {
-    try {
-        await fs.writeFile(haremFilePath, JSON.stringify(harem, null, 2), 'utf-8')
-    } catch (error) {
-        throw new Error('❀ No se pudo guardar el archivo harem.json.')
-    }
+  try {
+    const data = await fs.readFile(haremFilePath, 'utf-8')
+    return JSON.parse(data)
+  } catch {
+    return []
+  }
 }
 
 let handler = async (m, { conn }) => {
-    const userId = m.sender
-    const now = Date.now()
+  const userId = m.sender
+  const now = Date.now()
 
-    if (cooldowns[userId] && now < cooldowns[userId]) {
-        const remainingTime = Math.ceil((cooldowns[userId] - now) / 1000)
-        const minutes = Math.floor(remainingTime / 60)
-        const seconds = remainingTime % 60
-        return await conn.reply(m.chat, `《✧》Debes esperar *${minutes} minutos y ${seconds} segundos* para usar *#rw* de nuevo.`, m)
-    }
+  if (cooldowns[userId] && now < cooldowns[userId]) {
+    const rem = Math.ceil((cooldowns[userId] - now) / 1000)
+    const min = Math.floor(rem / 60)
+    const sec = rem % 60
+    return conn.reply(m.chat, `ꕥ Espera *${min}m ${sec}s* para tirar roll otra vez`, m)
+  }
 
-    try {
-        const characters = await loadCharacters()
-        const randomCharacter = characters[Math.floor(Math.random() * characters.length)]
-        const randomImage = randomCharacter.img[Math.floor(Math.random() * randomCharacter.img.length)]
+  try {
+    const characters = await loadCharacters()
+    const harem = await loadHarem()
 
-        const harem = await loadHarem()
-        const userEntry = harem.find(entry => entry.characterId === randomCharacter.id)
-        const statusMessage = randomCharacter.user 
-            ? `Reclamado por @${randomCharacter.user.split('@')[0]}` 
-            : 'Libre'
+    // Tirar 1 random personaje
+    const randomChar = characters[Math.floor(Math.random() * characters.length)]
 
-        const message = `❀ Nombre » *${randomCharacter.name}*
-⚥ Género » *${randomCharacter.gender}*
-✰ Valor » *${randomCharacter.value}*
-♡ Estado » ${statusMessage}
-❖ Fuente » *${randomCharacter.source}*
-✦ ID: *${randomCharacter.id}*`
+    // Buscar si está en harem y quién lo tiene
+    const userEntry = harem.find(h => h.characterId === randomChar.id)
+    const estado = userEntry ? `Reclamado por @${userEntry.userId.split('@')[0]}` : 'Libre'
 
-        const mentions = userEntry ? [userEntry.userId] : []
-        await conn.sendFile(m.chat, randomImage, `${randomCharacter.name}.jpg`, message, m, { mentions })
+    // Mensaje tipo lista similar al ejemplo que pusiste
+    let msg = `ꕥ Personaje \n\n`
 
-        if (!randomCharacter.user) {
-            await saveCharacters(characters)
-        }
+    msg += `✩ 𝙉𝙤𝙢𝙗𝙧𝙚 › *${randomChar.name}*\n`
+    msg += `✩ 𝙂é𝙣𝙚𝙧𝙤 › *${randomChar.gender}*\n`
+    msg += `✩ 𝙑𝙖𝙡𝙤𝙧  › *${randomChar.value}*\n`
+    msg += `✩ 𝙀𝙨𝙩𝙖𝙙𝙤 › *${estado}*\n`
+    msg += `✩ 𝙁𝙪𝙚𝙣𝙩𝙚 › *${randomChar.source}*\n`
+    msg += `✩ 𝙄𝘿    › *${randomChar.id}*\n\n`
 
-        cooldowns[userId] = now + 15 * 60 * 1000
+    msg += `> ────── Página *1* de *1*\n`
+    msg += `> Para tirar otra vez › *#rw*\n`
 
-    } catch (error) {
-        await conn.reply(m.chat, `✘ Error al cargar el personaje: ${error.message}`, m)
-    }
+    const mentions = userEntry ? [userEntry.userId] : []
+    await conn.sendFile(m.chat, randomChar.img[0], `${randomChar.name}.jpg`, msg, m, { mentions })
+
+    cooldowns[userId] = now + 15 * 60 * 1000
+  } catch (e) {
+    await conn.reply(m.chat, `❌ Error al cargar personaje: ${e.message}`, m)
+  }
 }
 
-handler.help = ['ver', 'rw', 'rollwaifu']
+handler.help = ['rollwaifu', 'rw', 'ver']
 handler.tags = ['gacha']
-handler.command = ['ver', 'rw', 'rollwaifu']
+handler.command = ['rollwaifu', 'rw', 'ver']
 handler.group = true
 
 export default handler
