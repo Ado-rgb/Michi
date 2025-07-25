@@ -1,5 +1,6 @@
 import fetch from "node-fetch"
 import yts from 'yt-search'
+import { proto, generateWAMessageFromContent } from '@adiwajshing/baileys'
 
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 
@@ -20,22 +21,45 @@ const handler = async (m, { conn, text, command }) => {
     const { title, url } = ytplay2
     const groupLink = (global.hyd_gcbot && global.hyd_gcbot[1]) || 'https://chat.whatsapp.com/defaultlink'
 
-    // Mensaje con botón interactivo para unirse al grupo
-    const buttons = [
-      {
-        buttonId: 'join_group',
-        buttonText: { displayText: 'Unirme al grupo' },
-        type: 1
+    // Armar mensaje interactivo con botón URL usando proto
+    const messageContent = {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: {
+            deviceListMetadata: {},
+            deviceListMetadataVersion: 2
+          },
+          interactiveMessage: proto.Message.InteractiveMessage.create({
+            body: proto.Message.InteractiveMessage.Body.create({
+              text: `✅ *Subida exitosa*\n${title}\n\nPulsa el botón para unirte al grupo`
+            }),
+            footer: proto.Message.InteractiveMessage.Footer.create({
+              text: 'Michino Ai 🦈'
+            }),
+            header: proto.Message.InteractiveMessage.Header.create({
+              hasMediaAttachment: false
+            }),
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              buttons: [
+                {
+                  name: 'cta_url',
+                  buttonParamsJson: JSON.stringify({
+                    display_text: 'Unirme al grupo',
+                    url: groupLink,
+                    merchant_url: groupLink
+                  })
+                }
+              ]
+            })
+          })
+        }
       }
-    ]
+    }
 
-    await conn.sendMessage(m.chat, {
-      text: `✅ *Subida exitosa*\n${title}`,
-      footer: 'Michino Ai 🦈',
-      buttons,
-      headerType: 1
-    }, { quoted: m })
+    const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
+    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 
+    // Ahora envía el audio o video según comando
     if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
       const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
       if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar enlace audio.')
