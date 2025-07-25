@@ -19,7 +19,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
     participant: "0@s.whatsapp.net"
   }
 
-  let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => 'https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1745522645448.jpeg')
+  let userJid = m.messageStubParameters[0]
+  let pp = await conn.profilePictureUrl(userJid, 'image').catch(_ => 'https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1745522645448.jpeg')
   let img = await (await fetch(pp)).buffer()
   let chat = global.db.data.chats[m.chat]
 
@@ -32,13 +33,16 @@ export async function before(m, { conn, participants, groupMetadata }) {
 `ꕥ Bienvenid@ a *${groupMetadata.subject}*!
 
 ✰ *Nuevo miembro:*
-> › @${m.messageStubParameters[0].split`@`[0]}
+> › @${userJid.split('@')[0]}
 
 ✰ *Detalles:*
 > › Ahora somos *${groupSize}* en el grupo
 > › ${global.welcom1 || 'Pásala chido, saluda y participa'}
 > › Usa *#menu* para ver los comandos`
-    await conn.sendMini(m.chat, 'Nuevo miembro', global.dev, bienvenida, img, img, global.redes, fkontak)
+    await conn.sendMessage(m.chat, { 
+      text: bienvenida,
+      mentions: [userJid]
+    }, { quoted: fkontak })
   }
 
   if (chat.welcome && (m.messageStubType == 28 || m.messageStubType == 32)) {
@@ -46,12 +50,15 @@ export async function before(m, { conn, participants, groupMetadata }) {
 `ꕥ Adiós de *${groupMetadata.subject}*!
 
 ✰ *Se fue:*
-> › @${m.messageStubParameters[0].split`@`[0]}
+> › @${userJid.split('@')[0]}
 
 ✰ *Detalles:*
 > › Ahora somos *${groupSize}* miembros
 > › ${global.welcom2 || 'Vuelve pronto, te vamos a extrañar'}
 > › Usa *#help* si necesitas algo`
-    await conn.sendMini(m.chat, 'Alguien salió del grupo', global.dev, despedida, img, img, global.redes, fkontak)
+    await conn.sendMessage(m.chat, { 
+      text: despedida,
+      mentions: [userJid]
+    }, { quoted: fkontak })
   }
 }
