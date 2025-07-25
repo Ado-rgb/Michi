@@ -24,18 +24,22 @@ const handler = async (m, { conn, text, command }) => {
     let { title, thumbnail, url } = ytplay2
     const thumb = (await conn.getFile(thumbnail)).data
 
-    // Mensaje con miniatura, título y botón de "Unirme al grupo"
+    // Mensaje con miniatura y botón "Unirme al grupo"
     await conn.sendMessage(m.chat, {
-      groupInviteMessage: {
-        groupJid: "120363294999999999@g.us", // no importa si es falso, el botón igual sale
-        inviteCode: "DMTjbGxYv5R7YSzmFHfO5c", // código de tu grupo
-        groupName: "Adonix MD",
-        caption: `✅ *Subida exitosa*\n${title}`,
-        jpegThumbnail: thumb
+      text: `✅ *Subida exitosa*\n${title}`,
+      contextInfo: {
+        externalAdReply: {
+          title: "Únete a nuestra comunidad",
+          body: "Haz clic en Unirme al grupo",
+          thumbnail: thumb,
+          mediaType: 1,
+          renderLargerThumbnail: true,
+          sourceUrl: "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c" // enlace real pero no visible
+        }
       }
     }, { quoted: m })
 
-    // Enviar archivo según comando
+    // Enviar el archivo según comando
     if (['pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
       const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
       if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar el enlace de audio.')
