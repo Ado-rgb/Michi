@@ -18,27 +18,22 @@ const handler = async (m, { conn, text, command }) => {
     if (!ytplay2) return m.reply('✧ No encontré nada de eso.')
 
     const { title, url } = ytplay2
-    const botname = global.wm || 'MiBot'
-    const [botBody, gcbot_short] = global.hyd_gcbot || ['Unirme al grupo', 'https://chat.whatsapp.com/defaultlink']
-    const banner = 'https://files.catbox.moe/h3lk3c.jpg'
-    const thumbBuffer = await (await fetch(banner)).buffer()
+    const groupLink = (global.hyd_gcbot && global.hyd_gcbot[1]) || 'https://chat.whatsapp.com/defaultlink'
+
+    // Mensaje con botón interactivo para unirse al grupo
+    const buttons = [
+      {
+        buttonId: 'join_group',
+        buttonText: { displayText: 'Unirme al grupo' },
+        type: 1
+      }
+    ]
 
     await conn.sendMessage(m.chat, {
       text: `✅ *Subida exitosa*\n${title}`,
-      contextInfo: {
-        mentionedJid: [m.sender],
-        externalAdReply: {
-          title: botname,
-          body: `🔗 ${botBody}`,  // Este texto sale como “botón”
-          mediaType: 1,
-          mediaUrl: gcbot_short,
-          sourceUrl: gcbot_short,
-          thumbnail: thumbBuffer,
-          showAdAttribution: false,
-          containsAutoReply: true,
-          renderLargerThumbnail: true
-        }
-      }
+      footer: 'Michino Ai 🦈',
+      buttons,
+      headerType: 1
     }, { quoted: m })
 
     if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
