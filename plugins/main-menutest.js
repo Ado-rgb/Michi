@@ -1,8 +1,10 @@
+import fetch from 'node-fetch'
+
 let handler = async (m, { conn }) => {
   let name = m.pushName || m.sender.split('@')[0] // evitar null
-  let prefix = (global.prefix && global.prefix[0]) ? global.prefix[0] : '.' // evitar undefined
+  let prefix = (global.prefix && global.prefix[0]) ? global.prefix[0] : '.'
 
-  let menu = `> Hola @${name}, bienvenido/a al menú de *Mai*\n\n`
+  let menu = `> Hola @${name}, bienvenido/a al menú de *${botname}* ꕤ\n\n`
 
   // agrupar comandos por tags
   let groups = {}
@@ -24,12 +26,24 @@ let handler = async (m, { conn }) => {
     menu += `╰───────────────────╯\n`
   }
 
-  // enviar con imagen global.banner
-  await conn.sendMessage(m.chat, {
-    image: { url: global.banner }, // asegúrate de definir global.banner
-    caption: menu,
-    mentions: [m.sender]
-  })
+  // enviar con externalAdReply
+  await conn.sendMessage(m.chat, { 
+    text: menu,
+    contextInfo: {
+      mentionedJid: [m.sender],
+      externalAdReply: {                
+        title: botname,
+        body: textbot,
+        mediaType: 1,
+        mediaUrl: redes,
+        sourceUrl: redes,
+        thumbnail: await (await fetch(banner)).buffer(),
+        showAdAttribution: false,
+        containsAutoReply: true,
+        renderLargerThumbnail: true
+      }
+    }
+  }, { quoted: m })
 }
 
 handler.help = ['menu']
