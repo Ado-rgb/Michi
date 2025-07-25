@@ -43,7 +43,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
 handler.command = ['dalle']
 handler.help = ['dalle <texto>']
-handler.tags = ['ia']
+handler.tags = ['ai']
 handler.register = true
 
 export default handler
