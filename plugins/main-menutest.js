@@ -58,11 +58,13 @@ let handler = async (m, { conn }) => {
     menu += `╰───────────────────╯\n`
   }
 
-  // enviar con externalAdReply
+  // enviar con externalAdReply y como reenviado muchas veces
   await conn.sendMessage(m.chat, { 
     text: menu,
     contextInfo: {
       mentionedJid: [m.sender],
+      forwardingScore: 999, // número alto para que aparezca "Reenviado muchas veces"
+      isForwarded: true,
       externalAdReply: {                
         title: global.botname,
         body: global.textbot,
