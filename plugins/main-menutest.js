@@ -2,7 +2,7 @@ let handler = async (m, { conn }) => {
   let name = m.pushName || m.sender.split('@')[0] // evitar null
   let prefix = (global.prefix && global.prefix[0]) ? global.prefix[0] : '.' // evitar undefined
 
-  let menu = `> _Hola @${name}, bienvenido/a al menú de *Mai* ꕤ_\n\n`
+  let menu = `> Hola @${name}, bienvenido/a al menú de *Mai*\n\n`
 
   // agrupar comandos por tags
   let groups = {}
@@ -21,7 +21,7 @@ let handler = async (m, { conn }) => {
     for (let cmd of groups[tag]) {
       menu += `│ ꕥ › *${prefix}${cmd}*\n`
     }
-    menu += `╰────────────────────────╯\n`
+    menu += `╰──────────────────────╯\n`
   }
 
   // enviar con imagen global.banner
