@@ -1,9 +1,9 @@
 import fetch from "node-fetch"
 import yts from 'yt-search'
-import axios from "axios"
+
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 
-const handler = async (m, { conn, text, usedPrefix, command }) => {
+const handler = async (m, { conn, text, command }) => {
   try {
     if (!text.trim()) {
       return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
@@ -21,75 +21,45 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       return m.reply('✧ No se encontraron resultados para tu búsqueda.')
     }
 
-    let { title, thumbnail, timestamp, views, ago, url, author } = ytplay2
-    title = title || 'no encontrado'
-    thumbnail = thumbnail || 'no encontrado'
-    timestamp = timestamp || 'no encontrado'
-    views = views || 'no encontrado'
-    ago = ago || 'no encontrado'
-    url = url || 'no encontrado'
-    author = author || 'no encontrado'
+    let { title, thumbnail, url } = ytplay2
+    const thumb = (await conn.getFile(thumbnail)).data
 
-    const vistas = formatViews(views)
-    const canal = author.name ? author.name : 'Desconocido'
-    const infoMessage = `> ✐ \`Enviando Pedido..\``
-    const thumb = (await conn.getFile(thumbnail))?.data
-    const JT = {
+    await conn.sendMessage(m.chat, {
+      text: `✅ *Subida exitosa*\n${title}`,
       contextInfo: {
         externalAdReply: {
-          title: title,
-          body: dev,
-          mediaType: 1,
-          previewType: 0,
-          mediaUrl: 'https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c?mode=r_t',
-          thumbnail: thumb,
-          renderLargerThumbnail: true,
-        },
-      },
-    }
-    await conn.reply(m.chat, infoMessage, m, JT)
-
-    if (['play', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
-      try {
-        const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
-        const resulta = api.result
-        const result = resulta.download.url
-        if (!result) throw new Error('⚠ El enlace de audio no se generó correctamente.')
-        await conn.sendMessage(m.chat, { audio: { url: result }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
-      } catch (e) {
-        return conn.reply(m.chat, '⚠︎ No se pudo enviar el audio. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
-      }
-    } else if (['play2', 'ytv', 'ytmp4', 'mp4'].includes(command)) {
-      try {
-        const response = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
-        const json = await response.json()
-
-        if (!json.success || !json.data?.download) {
-          throw new Error('No se pudo obtener el enlace de descarga')
+          title: global.wm,
+          body: 'Michino Ai 🦈',
+          mediaUrl: 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau',
+          sourceUrl: 'https://github.com/Ado926',
+          thumbnailUrl: 'https://files.catbox.moe/h3lk3c.jpg',
+          mediaType: 2,
+          renderLargerThumbnail: false,
+          jpegThumbnail: thumb
         }
-
-        await conn.sendFile(m.chat, json.data.download, `${json.data.title}.mp4`, title, m)
-      } catch (e) {
-        return conn.reply(m.chat, '⚠︎ No se pudo enviar el video. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
       }
+    }, { quoted: m })
+
+    if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
+      const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
+      if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar el enlace de audio.')
+      await conn.sendMessage(m.chat, { audio: { url: api.result.download.url }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
+    } else if (['play2', 'ytv', 'ytmp4', 'mp4'].includes(command)) {
+      const res = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
+      const json = await res.json()
+      if (!json.success || !json.data?.download) throw new Error('No se pudo obtener el enlace de descarga')
+      await conn.sendFile(m.chat, json.data.download, `${json.data.title}.mp4`, title, m)
     } else {
       return conn.reply(m.chat, '✧︎ Comando no reconocido.', m)
     }
+
   } catch (error) {
-    return m.reply(`⚠︎ Ocurrió un error: ${error}`)
+    return m.reply(`⚠︎ Ocurrió un error: ${error.message}`)
   }
 }
 
-handler.command = handler.help = ['play', 'yta', 'ytmp3', 'play2', 'ytv', 'ytmp4', 'playaudio', 'mp4']
+handler.command = handler.help = ['play', 'pl']
 handler.tags = ['descargas']
 handler.group = true
 
 export default handler
-
-function formatViews(views) {
-  if (views === undefined) return "No disponible"
-  if (views >= 1_000_000_000) return `${(views / 1_000_000_000).toFixed(1)}B (${views.toLocaleString()})`
-  if (views >= 1_000_000) return `${(views / 1_000_000).toFixed(1)}M (${views.toLocaleString()})`
-  if (views >= 1_000) return `${(views / 1_000).toFixed(1)}k (${views.toLocaleString()})`
-  return views.toString()
-}
