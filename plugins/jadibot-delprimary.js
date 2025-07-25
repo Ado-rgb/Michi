@@ -14,6 +14,5 @@ let handler = async (m, { conn, text }) => {
 handler.help = ['delprimary <idgrupo>']
 handler.tags = ['owner']
 handler.command = ['delprimary']
-handler.admin = true
 
 export default handler
