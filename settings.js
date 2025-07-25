@@ -48,13 +48,13 @@ global.yukiJadibts = true
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.packname = '✰✦✎ 𝐌𝐢𝐜𝐡𝐢-𝐁𝐨𝐭 ✎✦✰'
-global.botname = '✰ mіᥴһі ᥕᥲ ✿'
-global.wm = '✎◟ աα mіᥴһі ✧'
-global.author = '✦ mᥲძᥱ ᥕі𝗍һ ᑲᥡ Ado ✰'
-global.dev = '✎ ⍴᥆ᥕᥱrᥱძ ᑲᥡ Ado ✦'
-global.textbot = '✰ Michi ✰ ᴍᴀᴅᴇ ᥕі𝗍һ ᑲᥡ Ado ✎'
-global.etiqueta = '✦ⁱᵃᵐ|Ado✎'
+global.packname = 'ꕥ ✦ Mai-Bot ✦ ꕥ'
+global.botname = '✿ ꕥ Mai ꕥ ✿'
+global.wm = '⚥ ʷᵃ ᴹᵃⁱ ⚥'
+global.author = '⛁ Created with by Ado, yosue ✧'
+global.dev = '✦ Powered by Ado ✦'
+global.textbot = 'ꕥ Mai Made with by choquitos '
+global.etiqueta = 'Yosue | Ado ⚡'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
