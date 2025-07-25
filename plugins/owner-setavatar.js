@@ -51,7 +51,7 @@ const isImageValid = (buffer) => {
 };
 
 handler.help = ['setcatalogo'];
-handler.tags = ['tools'];
+handler.tags = ['owner'];
 handler.command = ['setavatar'];
 handler.rowner = true;
 
