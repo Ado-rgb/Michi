@@ -1,34 +1,55 @@
-/* Github Search By WillZek 
-- Free Codes Titan  
-- https://whatsapp.com/channel/0029ValMlRS6buMFL9d0iQ0S
-*/
-
-// 𝗚𝗶𝘁𝗵𝘂𝗯 𝗦𝗲𝗮𝗿𝗰𝗵
-
 import fetch from 'node-fetch';
 
-let handler = async(m, { conn, text, usedPrefix, command }) => {
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+  if (!text) return conn.reply(m.chat, `ꕥ Ingresa el nombre de un repositorio de GitHub.\n\n✰ *Ejemplo:*\n> › ${usedPrefix + command} whatsapp-bot`, m);
 
-if (!text) return conn.reply(m.chat, `${emoji} Por favor ingresa un nombre de un repositorio GitHub.`, m);
+  try {
+    let api = `https://dark-core-api.vercel.app/api/search/github?key=api&text=${encodeURIComponent(text)}`;
+    let response = await fetch(api);
+    let json = await response.json();
 
-try {
-let api = `https://dark-core-api.vercel.app/api/search/github?key=api&text=${text}`;
+    if (!json.results || !json.results.length) {
+      return m.reply(`ꕥ No encontré resultados para *${text}*`);
+    }
 
-let response = await fetch(api);
-let json = await response.json();
-let result = json.results[0];
+    let result = json.results[0];
 
-let txt = `🍬 *Nombre:* ${result.name}\n👑 *Owner:* ${result.creator}\n🌟 *Estrellas:* ${result.stars}\n🔖 *Bifurcaciones:* ${result.forks}\n📜 *Descripcion:* ${result.description}\n📆 *Creado:* ${result.createdAt}\n🔗 *Link:* ${result.cloneUrl}`;
+    let txt = 
+`╭─⋆˚✿˖° ❀ *REPOSITORIO ENCONTRADO* ❀ ⋆˚✿˖°─╮
+│ ꕥ › *Nombre:* ${result.name}
+│ ꕥ › *Owner:* ${result.creator}
+│ ꕥ › *Estrellas:* ${result.stars}
+│ ꕥ › *Bifurcaciones:* ${result.forks}
+│ ꕥ › *Descripción:* ${result.description || 'Sin descripción'}
+│ ꕥ › *Creado:* ${result.createdAt}
+│ ꕥ › *Link:* ${result.cloneUrl}
+╰───────────────────────────╯`;
 
-let img = 'https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1745610598914.jpeg';
+    let img = 'https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1745610598914.jpeg';
 
-conn.sendMessage(m.chat, { image: { url: img }, caption: txt }, { quoted: fkontak });
+    await conn.sendMessage(m.chat, { 
+      text: txt,
+      contextInfo: {
+        mentionedJid: [m.sender],
+        externalAdReply: {                
+          title: botname,
+          body: textbot,
+          mediaType: 1,
+          mediaUrl: result.cloneUrl,
+          sourceUrl: result.cloneUrl,
+          thumbnail: await (await fetch(img)).buffer(),
+          showAdAttribution: false,
+          containsAutoReply: true,
+          renderLargerThumbnail: true
+        }
+      }
+    }, { quoted: m })
 
-} catch (error) {
-console.error(error)
-m.reply(`Error: ${error.message}`);
-m.react('✖️');
- }
+  } catch (error) {
+    console.error(error)
+    m.reply(`Error: ${error.message}`);
+    m.react('✖️');
+  }
 };
 
 handler.command = ['githubsearch', 'gbsearch'];
