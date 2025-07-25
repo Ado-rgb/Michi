@@ -61,7 +61,7 @@ const handler = async (m, { conn, text, command }) => {
         audio: { url: api.result.download.url },
         fileName: `${api.result.title}.mp3`,
         mimetype: "audio/mpeg",
-        ptt: false
+        ptt: true
       }, { quoted: m })
     } else if (["play2", "ytv", "ytmp4", "mp4"].includes(command)) {
       const res = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
