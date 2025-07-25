@@ -1,10 +1,9 @@
 import fetch from "node-fetch"
 import yts from 'yt-search'
-import axios from "axios"
 
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 
-const handler = async (m, { conn, text, usedPrefix, command }) => {
+const handler = async (m, { conn, text, command }) => {
   try {
     if (!text.trim()) {
       return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
@@ -26,32 +25,18 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const thumb = (await conn.getFile(thumbnail)).data
 
     // Mensaje con miniatura, título y botón de "Unirme al grupo"
-    const infoMessage = {
-      text: `✅ *Subida exitosa*\n${url}`,
-      contextInfo: {
-        externalAdReply: {
-          title: title,
-          body: "📀 Adonix MD - Made with Ado",
-          thumbnail: thumb,
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          sourceUrl: "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c" // tu grupo
-        }
-      },
-      buttons: [
-        {
-          buttonId: "join_group",
-          buttonText: { displayText: "Unirme al grupo" },
-          type: 1
-        }
-      ],
-      headerType: 4
-    }
+    await conn.sendMessage(m.chat, {
+      groupInviteMessage: {
+        groupJid: "120363294999999999@g.us", // no importa si es falso, el botón igual sale
+        inviteCode: "DMTjbGxYv5R7YSzmFHfO5c", // código de tu grupo
+        groupName: "Adonix MD",
+        caption: `✅ *Subida exitosa*\n${title}`,
+        jpegThumbnail: thumb
+      }
+    }, { quoted: m })
 
-    await conn.sendMessage(m.chat, infoMessage, { quoted: m })
-
-    // Enviar el archivo según el comando
-    if (['ptest', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
+    // Enviar archivo según comando
+    if (['pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
       const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
       if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar el enlace de audio.')
       await conn.sendMessage(m.chat, { audio: { url: api.result.download.url }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
@@ -69,7 +54,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 }
 
-handler.command = handler.help = ['ptest']
+handler.command = handler.help = ['pl']
 handler.tags = ['descargas']
 handler.group = true
 
