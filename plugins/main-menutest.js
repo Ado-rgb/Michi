@@ -42,7 +42,7 @@ let handler = async (m, { conn }) => {
     : '*SUBBOT*'
 
   let menu = `> Hola @${name}, Soy *${global.botname}*\n`
-  menu += `ꕤ » ${tipoBot}\n\n`
+  menu += `\nꕤ » ${tipoBot}\n\n`
 
   // agrupar comandos por tags
   let groups = {}
