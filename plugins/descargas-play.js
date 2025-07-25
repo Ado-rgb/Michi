@@ -21,7 +21,6 @@ const handler = async (m, { conn, text, command }) => {
 
     const { title, url, thumbnail } = ytResult
     const botname = global.botname || "Michino Ai"
-    const textbot = "Tu bot de música favorito"
     const redes = "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c?mode=r_t"
     const userId = m.sender
 
@@ -53,7 +52,8 @@ const handler = async (m, { conn, text, command }) => {
       await conn.sendMessage(m.chat, {
         audio: { url: api.result.download.url },
         fileName: `${api.result.title}.mp3`,
-        mimetype: "audio/mpeg"
+        mimetype: "audio/mpeg",
+        ptt: true
       }, { quoted: m })
     } else if (["play2", "ytv", "ytmp4", "mp4"].includes(command)) {
       const res = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
