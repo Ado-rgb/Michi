@@ -24,25 +24,25 @@ const handler = async (m, { conn, text, command }) => {
     let { title, thumbnail, url } = ytplay2
     const thumb = (await conn.getFile(thumbnail)).data
 
-    const groupLink = "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c"
-
-    // Mensaje con miniatura y botón verde real
     await conn.sendMessage(m.chat, {
       text: `✅ *Subida exitosa*\n${title}`,
       contextInfo: {
         externalAdReply: {
-          title: title,
-          body: "Haz clic en Unirme al grupo",
-          mediaType: 1,
-          jpegThumbnail: thumb,
-          renderLargerThumbnail: true,
-          mediaUrl: groupLink,
-          sourceUrl: groupLink
+          showAdAttribution: true,
+          title: global.wm,
+          body: 'Michino Ai 🦈',
+          mediaUrl: 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau',
+          description: null,
+          previewType: 'PHOTO',
+          thumbnailUrl: 'https://files.catbox.moe/h3lk3c.jpg',
+          sourceUrl: 'https://github.com/Ado926',
+          mediaType: 2,
+          renderLargerThumbnail: false,
+          jpegThumbnail: thumb // opcional si quieres que el thumb sea el de yt tambien
         }
       }
     }, { quoted: m })
 
-    // Enviar el archivo según comando
     if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
       const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
       if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar el enlace de audio.')
