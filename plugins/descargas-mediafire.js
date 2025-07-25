@@ -24,7 +24,9 @@ const handler = async (m, { conn, text, command }) => {
     let { title, thumbnail, url } = ytplay2
     const thumb = (await conn.getFile(thumbnail)).data
 
-    // Mensaje decorado con miniatura y botón "Unirme al grupo"
+    const groupLink = "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c"
+
+    // Mensaje con miniatura y botón verde real
     await conn.sendMessage(m.chat, {
       text: `✅ *Subida exitosa*\n${title}`,
       contextInfo: {
@@ -32,10 +34,10 @@ const handler = async (m, { conn, text, command }) => {
           title: title,
           body: "Haz clic en Unirme al grupo",
           mediaType: 1,
-          thumbnail: thumb,
+          jpegThumbnail: thumb,
           renderLargerThumbnail: true,
-          mediaUrl: "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c",
-          sourceUrl: "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c"
+          mediaUrl: groupLink,
+          sourceUrl: groupLink
         }
       }
     }, { quoted: m })
