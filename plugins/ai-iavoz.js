@@ -1,20 +1,27 @@
 import fetch from 'node-fetch'
 
+async function streamToBuffer(stream) {
+  const chunks = []
+  for await (const chunk of stream) {
+    chunks.push(chunk)
+  }
+  return Buffer.concat(chunks)
+}
+
 let handler = async (m, { conn, text, usedPrefix }) => {
   if (!text) return conn.reply(m.chat, `🗣️ Mande un texto pa que Adonix le hable al toque`, m)
 
   try {
-    // Mostrar que está grabando audio
     await conn.sendPresenceUpdate('recording', m.chat)
 
-    // Obtener el stream de audio directo
     const res = await fetch(`https://myapiadonix.vercel.app/api/adonixvoz?q=${encodeURIComponent(text)}`)
 
     if (!res.ok) throw new Error('No pude obtener audio de Adonix')
 
-    // Mandar el audio PTT
+    const bufferAudio = await streamToBuffer(res.body)
+
     await conn.sendMessage(m.chat, {
-      audio: res.body,
+      audio: bufferAudio,
       mimetype: 'audio/mpeg',
       ptt: true
     }, { quoted: m })
@@ -26,7 +33,5 @@ let handler = async (m, { conn, text, usedPrefix }) => {
 }
 
 handler.command = ['iavoz']
-handler.command = ['iavoz']
-handler.tags = ['ai']
 
 export default handler
