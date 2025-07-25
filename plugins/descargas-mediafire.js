@@ -23,23 +23,20 @@ const handler = async (m, { conn, text, command }) => {
 
     const { title, url } = ytplay2
     const botname = global.wm || 'MiBot'
-    const textbot = 'Michino Ai 🦈'
-    const redes = 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau'
+    const [botBody, gcbot_short] = global.hyd_gcbot || ['Unirme al grupo', 'https://chat.whatsapp.com/defaultlink']
     const banner = 'https://files.catbox.moe/h3lk3c.jpg'
     const thumbBuffer = await (await fetch(banner)).buffer()
-
-    const mentionedJid = [m.sender] // si quieres mencionar a quien mando el mensaje
 
     await conn.sendMessage(m.chat, {
       text: `✅ *Subida exitosa*\n${title}`,
       contextInfo: {
-        mentionedJid,
+        mentionedJid: [m.sender],
         externalAdReply: {
           title: botname,
-          body: textbot,
+          body: botBody,
           mediaType: 1,
-          mediaUrl: redes,
-          sourceUrl: redes,
+          mediaUrl: gcbot_short,
+          sourceUrl: gcbot_short,
           thumbnail: thumbBuffer,
           showAdAttribution: false,
           containsAutoReply: true,
