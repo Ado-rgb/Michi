@@ -22,7 +22,7 @@ const handler = async (m, { conn, text, command }) => {
     const { title, url, thumbnail } = ytResult
     const botname = global.botname || "Michino Ai"
     const textbot = "Tu bot de música favorito"
-    const redes = "https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau"
+    const redes = "https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c?mode=r_t"
     const userId = m.sender
 
     // Miniatura real del video
@@ -38,7 +38,6 @@ const handler = async (m, { conn, text, command }) => {
           body: textbot,
           mediaType: 1,
           mediaUrl: redes,
-          sourceUrl: redes,
           thumbnail: thumbBuffer,
           showAdAttribution: false,
           containsAutoReply: true,
