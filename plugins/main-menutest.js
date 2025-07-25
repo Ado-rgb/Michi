@@ -19,7 +19,7 @@ let handler = async (m, { conn }) => {
     if (!groups[tag].length) continue
     menu += `╭─⋆˚✿˖° ❀ *${tag.toUpperCase()}* ❀ ⋆˚✿˖°─╮\n`
     for (let cmd of groups[tag]) {
-      menu += `│ ꕥ Comando › *${prefix}${cmd}*\n`
+      menu += `│ ꕥ › *${prefix}${cmd}*\n`
     }
     menu += `╰────────────────────────╯\n`
   }
