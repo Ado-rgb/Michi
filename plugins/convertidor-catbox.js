@@ -6,23 +6,23 @@ import { fileTypeFromBuffer } from "file-type";
 let handler = async (m, { conn }) => {
   let q = m.quoted ? m.quoted : m;
   let mime = (q.msg || q).mimetype || '';
-  if (!mime) return conn.reply(m.chat, `${emoji} Por favor, responde a un archivo válido (imagen, video, etc.).`, m);
-  
+  if (!mime) return conn.reply(m.chat, `ꕥ Por favor responde a un archivo válido (imagen, video, etc.).`, m);
+
   await m.react(rwait);
-  
+
   try {
     let media = await q.download();
     let isTele = /image\/(png|jpe?g|gif)|video\/mp4/.test(mime);
     let link = await catbox(media);
-    
-    let txt = `*乂 C A T B O X - U P L O A D E R 乂*\n\n`;
-    txt += `*» Enlace* : ${link}\n`;
-    txt += `*» Tamaño* : ${formatBytes(media.length)}\n`;
-    txt += `*» Expiración* : ${isTele ? 'No expira' : 'Desconocido'}\n\n`;
-    txt += `> *${dev}*`;
-    
+
+    let txt = `ꕥ *Archivo subido a Catbox*\n\n`;
+    txt += `> › *Enlace:* ${link}\n`;
+    txt += `> › *Tamaño:* ${formatBytes(media.length)}\n`;
+    txt += `> › *Expiración:* ${isTele ? 'No expira' : 'Desconocido'}\n\n`;
+    txt += `✎ *Subido por:* ${botname}`;
+
     await conn.sendFile(m.chat, media, 'thumbnail.jpg', txt, m, fkontak);
-    
+
     await m.react(done);
   } catch {
     await m.react(error);
