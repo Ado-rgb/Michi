@@ -3,19 +3,15 @@ import path from 'path'
 
 const filePath = path.join('./welcome.json')
 
-// cargar datos al iniciar
-let welcomeData = {}
-if (fs.existsSync(filePath)) {
-  try {
-    welcomeData = JSON.parse(fs.readFileSync(filePath))
-  } catch (e) {
-    console.error('Error leyendo welcome.json:', e)
-    welcomeData = {}
-  }
+// Asegurar que el archivo exista
+if (!fs.existsSync(filePath)) {
+  fs.writeFileSync(filePath, JSON.stringify({}, null, 2))
 }
 
-// aseguramos que global.welcom1 exista
-global.welcom1 = global.welcom1 || {}
+let welcomeData = JSON.parse(fs.readFileSync(filePath))
+
+// Asegurar que global.welcom1 sea un objeto
+global.welcom1 = welcomeData
 
 let handler = async (m, { conn, text }) => {
   if (!m.isGroup) return m.reply('⚠️ Este comando solo funciona en grupos.')
@@ -23,14 +19,14 @@ let handler = async (m, { conn, text }) => {
 
   const welcomeMsg = text.trim()
 
-  // guardar en memoria y en global
+  // Guardar bienvenida
   welcomeData[m.chat] = welcomeMsg
   global.welcom1[m.chat] = welcomeMsg
 
-  // escribir al archivo
+  // Guardar en archivo
   fs.writeFileSync(filePath, JSON.stringify(welcomeData, null, 2))
 
-  m.reply(`✅ Bienvenida para este grupo actualizada:\n> ${welcomeMsg}`)
+  await m.reply(`✅ Bienvenida para este grupo actualizada:\n> ${welcomeMsg}`)
 }
 
 handler.help = ['setwelcome']
