@@ -28,22 +28,6 @@ export async function before(m) {
     user.commands += 1
   } else {
     const comando = m.text.trim().split(' ')[0]
-    const botname = global.botname || "Michino Ai"
-    const redes = "https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau"
-
-    await m.conn.sendMessage(m.chat, {
-      text: `✖ El comando *${comando}* no existe o está fuera de servicio.\n\n💡 *Tip:* Usa \`${usedPrefix}help\` para ver la lista de comandos disponibles.`,
-      contextInfo: {
-        externalAdReply: {
-          title: botname,
-          body: `No encontré el comando ${comando}, prueba con ${usedPrefix}help`,
-          mediaType: 1,
-          mediaUrl: redes,
-          sourceUrl: redes,
-          showAdAttribution: false,
-          containsAutoReply: true
-        }
-      }
-    }, { quoted: m })
+    await m.reply(`✖ El comando *${comando}* no existe o está fuera de servicio.\n\n💡 *Tip:* Usa \`${usedPrefix}help\` para ver la lista de comandos disponibles.`, m)
   }
 }
