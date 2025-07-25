@@ -484,7 +484,7 @@ await plugin.after.call(this, m, extra)
 console.error(e)
 }}
 if (m.coin)
-conn.reply(m.chat, `❮✦❯ Utilizaste ${+m.coin} ${moneda}`, m)
+conn.reply(m.chat, `✦ Utilizaste ${+m.coin} ${moneda}`, m)
 }
 break // Este break debería estar fuera del finally si quieres que el loop siga
 // O sea, si un plugin lanza un error, break termina el loop, si no, el loop continua.
