@@ -36,7 +36,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
 ✰ *Detalles:*
 > › Ahora somos *${groupSize}* en el grupo
-> › ${global.welcom1 || 'Pásala chido, saluda y participa'}
+> › ${global.welcom1?.[m.chat] || 'Pásala chido, saluda y participa'}
 > › Usa *#menu* para ver los comandos`
     await conn.sendMessage(m.chat, { 
       image: { url: pp },
