@@ -36,7 +36,7 @@ let handler = async (m, { conn }) => {
   let name = m.pushName || m.sender.split('@')[0]
   let prefix = (global.prefix && global.prefix[0]) ? global.prefix[0] : '.'
 
-  let menu = `> Hola @${name}, bienvenido/a al menú de *${global.botname}*\n\n`
+  let menu = `> Hola @${name}, Soy *${global.botname}*\n\n`
 
   // agrupar comandos por tags
   let groups = {}
