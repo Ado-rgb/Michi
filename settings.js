@@ -53,7 +53,7 @@ global.botname = '✿ ꕥ Mai ꕥ ✿'
 global.wm = '⚥ ʷᵃ ᴹᵃⁱ ⚥'
 global.author = '⛁ Created with by Ado, yosue ✧'
 global.dev = '✦ Powered by Ado ✦'
-global.textbot = 'ꕥ Mai Made with by choquitos '
+global.textbot = 'ꕥ Mai | Made with by choquitos'
 global.etiqueta = 'Yosue | Ado ⚡'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
