@@ -29,7 +29,6 @@ const handler = async (m, { conn, text, command }) => {
 
     // Mensaje de info decorado
     let infoMsg = `
-❀ *Información de descarga*
 ➪ *Usuario ›* @${userId.split('@')[0]}
 
 > ✧ *Título ›* ${title}
@@ -42,7 +41,7 @@ const handler = async (m, { conn, text, command }) => {
       mentions: [userId],
       contextInfo: {
         externalAdReply: {
-          title: 'Procesando tu solicitud..',
+          title: '✰ Procesando tu solicitud..',
           body: global.textbot || 'Shadow Ultra Edited',
           mediaType: 1,
           mediaUrl: redes,
