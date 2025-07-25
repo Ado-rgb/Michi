@@ -19,7 +19,7 @@ const handler = async (m, { conn, text, command }) => {
     if (!ytplay2) return m.reply('✧ No encontré nada de eso.')
 
     const { title, url } = ytplay2
-    const groupLink = (global.hyd_gcbot && global.hyd_gcbot[1]) || 'https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c?mode=r_t'
+    const groupLink = (global.hyd_gcbot && global.hyd_gcbot[1]) || 'https://myapiadonix.vercel.app'
 
     // Armar mensaje interactivo con botón URL usando proto
     const messageContent = {
@@ -44,7 +44,7 @@ const handler = async (m, { conn, text, command }) => {
                 {
                   name: 'cta_url',
                   buttonParamsJson: JSON.stringify({
-                    display_text: 'Unirme al grupo',
+                    display_text: 'Visitar Adonix API',
                     url: groupLink,
                     merchant_url: groupLink
                   })
