@@ -28,7 +28,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 ❀ *Imagen Generada*
 
 ➪ *Prompt ›* ${prompt}
-> API: *Adonix AI*
+> API: *Adonix*
 `.trim()
     }, { quoted: m })
 
