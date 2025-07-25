@@ -80,6 +80,6 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['menu']
 handler.tags = ['main']
-handler.command = ['menuts']
+handler.command = ['menu', 'help', 'menú']
 
 export default handler
