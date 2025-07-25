@@ -21,22 +21,29 @@ const handler = async (m, { conn, text, command }) => {
       return m.reply('✧ No se encontraron resultados para tu búsqueda.')
     }
 
-    let { title, thumbnail, url } = ytplay2
-    const thumb = (await conn.getFile(thumbnail)).data
+    const { title, url } = ytplay2
+    const botname = global.wm || 'MiBot'
+    const textbot = 'Michino Ai 🦈'
+    const redes = 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau'
+    const banner = 'https://files.catbox.moe/h3lk3c.jpg'
+    const thumbBuffer = await (await fetch(banner)).buffer()
+
+    const mentionedJid = [m.sender] // si quieres mencionar a quien mando el mensaje
 
     await conn.sendMessage(m.chat, {
       text: `✅ *Subida exitosa*\n${title}`,
       contextInfo: {
+        mentionedJid,
         externalAdReply: {
-          showAdAttribution: true,
-          title: global.wm,
-          body: 'Michino Ai 🦈',
-          mediaUrl: 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau',
-          sourceUrl: 'https://github.com/Ado926',
-          thumbnailUrl: 'https://files.catbox.moe/h3lk3c.jpg',
-          mediaType: 2,
-          renderLargerThumbnail: false,
-          jpegThumbnail: thumb
+          title: botname,
+          body: textbot,
+          mediaType: 1,
+          mediaUrl: redes,
+          sourceUrl: redes,
+          thumbnail: thumbBuffer,
+          showAdAttribution: false,
+          containsAutoReply: true,
+          renderLargerThumbnail: true
         }
       }
     }, { quoted: m })
