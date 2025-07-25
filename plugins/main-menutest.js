@@ -4,7 +4,7 @@ let handler = async (m, { conn }) => {
   let name = m.pushName || m.sender.split('@')[0] // evitar null
   let prefix = (global.prefix && global.prefix[0]) ? global.prefix[0] : '.'
 
-  let menu = `> Hola @${name}, bienvenido/a al menú de *${botname}* ꕤ\n\n`
+  let menu = `> Hola @${name}, bienvenido/a al menú de *${botname}*\n\n`
 
   // agrupar comandos por tags
   let groups = {}
@@ -36,7 +36,6 @@ let handler = async (m, { conn }) => {
         body: textbot,
         mediaType: 1,
         mediaUrl: redes,
-        sourceUrl: redes,
         thumbnail: await (await fetch(banner)).buffer(),
         showAdAttribution: false,
         containsAutoReply: true,
