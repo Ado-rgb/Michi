@@ -33,5 +33,6 @@ let handler = async (m, { conn, text, usedPrefix }) => {
 }
 
 handler.command = ['iavoz']
-
+handler.help = ['iavoz']
+handler.tags = ['ai']
 export default handler
