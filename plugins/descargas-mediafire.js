@@ -32,13 +32,11 @@ const handler = async (m, { conn, text, command }) => {
           title: global.wm,
           body: 'Michino Ai 🦈',
           mediaUrl: 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau',
-          description: null,
-          previewType: 'PHOTO',
-          thumbnailUrl: 'https://files.catbox.moe/h3lk3c.jpg',
           sourceUrl: 'https://github.com/Ado926',
+          thumbnailUrl: 'https://files.catbox.moe/h3lk3c.jpg',
           mediaType: 2,
           renderLargerThumbnail: false,
-          jpegThumbnail: thumb // opcional si quieres que el thumb sea el de yt tambien
+          jpegThumbnail: thumb
         }
       }
     }, { quoted: m })
