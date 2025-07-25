@@ -30,6 +30,7 @@ let handler = async (m, { conn }) => {
   const userId = m.sender;
   const now = Date.now();
 
+  // Chequear cooldown
   if (cooldowns[userId] && now < cooldowns[userId]) {
     const remainingTime = Math.ceil((cooldowns[userId] - now) / 1000);
     const min = Math.floor(remainingTime / 60);
@@ -41,12 +42,13 @@ let handler = async (m, { conn }) => {
     );
   }
 
+  // Verificar que cite mensaje del bot
   if (!m.quoted || m.quoted.sender !== conn.user.jid) {
     return await conn.reply(m.chat, '《✧》Debes citar un personaje válido enviado por el bot.', m);
   }
 
-  // Regex corregida para extraer ID con espacios y símbolo ›
-  const characterIdMatch = m.quoted.text.match(/ID\s*›\s*\*(.+?)\*/i);
+  // Extraer ID con nuevo formato (sin asteriscos)
+  const characterIdMatch = m.quoted.text.match(/ID\s*›\s*(\d+)/i);
   if (!characterIdMatch) {
     return await conn.reply(m.chat, '《✧》No se encontró un ID válido en el mensaje citado.', m);
   }
@@ -57,7 +59,7 @@ let handler = async (m, { conn }) => {
     const characters = await loadCharacters();
     const harem = await loadHarem();
 
-    const character = characters.find((c) => c.id === characterId);
+    const character = characters.find(c => c.id === characterId);
     if (!character) {
       return await conn.reply(m.chat, '《✧》El personaje con ese ID no existe.', m);
     }
@@ -71,13 +73,13 @@ let handler = async (m, { conn }) => {
       );
     }
 
-    // Reclamación
+    // Reclamar personaje
     character.user = userId;
     character.status = 'Reclamado';
 
     // Guardar en harem.json
     if (!harem[userId]) harem[userId] = [];
-    if (!harem[userId].some((p) => p.id === character.id)) {
+    if (!harem[userId].some(p => p.id === character.id)) {
       harem[userId].push(character);
     }
 
@@ -85,9 +87,11 @@ let handler = async (m, { conn }) => {
     await saveCharacters(characters);
     await saveHarem(harem);
 
+    // Cooldown de 30 minutos
     cooldowns[userId] = now + 30 * 60 * 1000;
 
     await conn.reply(m.chat, `✦ Has reclamado a *${character.name}* con éxito.`, m);
+
   } catch (err) {
     console.error(err);
     await conn.reply(m.chat, `✘ Error al reclamar: ${err.message}`, m);
