@@ -41,8 +41,7 @@ export async function before(m) {
           mediaUrl: redes,
           sourceUrl: redes,
           showAdAttribution: false,
-          containsAutoReply: true,
-          renderLargerThumbnail: true
+          containsAutoReply: true
         }
       }
     }, { quoted: m })
