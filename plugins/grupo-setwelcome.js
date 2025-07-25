@@ -1,15 +1,41 @@
-let handler = async (m, { conn, text, isRowner }) => {
-  if (!text) return m.reply(`${emoji} Por favor, proporciona una bienvenida para el bot.\n> Ejemplo: #setwelcome Hola user`);
+import fs from 'fs'
+import path from 'path'
 
-  global.welcom1 = text.trim();
-  
-  m.reply(`${emoji} La bienvenida del bot ha sido cambiado a: ${global.welcom1}`);
-};
+const filePath = path.join('./welcome.json')
 
-handler.help = ['setwelcome'];
-handler.tags = ['tools'];
-handler.command = ['setwelcome'];
-handler.owner = false;
-handler.admin = true;
+// cargar datos al iniciar
+let welcomeData = {}
+if (fs.existsSync(filePath)) {
+  try {
+    welcomeData = JSON.parse(fs.readFileSync(filePath))
+  } catch (e) {
+    console.error('Error leyendo welcome.json:', e)
+    welcomeData = {}
+  }
+}
 
-export default handler;
+// aseguramos que global.welcom1 exista
+global.welcom1 = global.welcom1 || {}
+
+let handler = async (m, { conn, text }) => {
+  if (!m.isGroup) return m.reply('⚠️ Este comando solo funciona en grupos.')
+  if (!text) return m.reply('Por favor, proporciona una bienvenida.\nEjemplo: #setwelcome Hola user')
+
+  const welcomeMsg = text.trim()
+
+  // guardar en memoria y en global
+  welcomeData[m.chat] = welcomeMsg
+  global.welcom1[m.chat] = welcomeMsg
+
+  // escribir al archivo
+  fs.writeFileSync(filePath, JSON.stringify(welcomeData, null, 2))
+
+  m.reply(`✅ Bienvenida para este grupo actualizada:\n> ${welcomeMsg}`)
+}
+
+handler.help = ['setwelcome']
+handler.tags = ['tools']
+handler.command = ['setwelcome']
+handler.admin = true
+
+export default handler
