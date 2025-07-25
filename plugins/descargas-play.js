@@ -33,7 +33,7 @@ const handler = async (m, { conn, text, command }) => {
       contextInfo: {
         mentionedJid: [userId],
         externalAdReply: {
-          title: botname,
+          title: '🕒 Procesando tu solicitud..',
           body: textbot,
           mediaType: 1,
           mediaUrl: redes,
