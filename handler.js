@@ -545,16 +545,36 @@ let user2 = m.pushName || 'Anónimo'
 let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom()
 
 const msg = {
-rowner: `『✦』El comando *${comando}* solo puede ser usado por los creadores del bot.`, 
-owner: `『✦』El comando *${comando}* solo puede ser usado por los desarrolladores del bot.`, 
-mods: `『✦』El comando *${comando}* solo puede ser usado por los moderadores del bot.`, 
-premium: `『✦』El comando *${comando}* solo puede ser usado por los usuarios premium.`, 
-group: `『✦』El comando *${comando}* solo puede ser usado en grupos.`,
-private: `『✦』El comando *${comando}* solo puede ser usado al chat privado del bot.`,
-admin: `『✦』El comando *${comando}* solo puede ser usado por los administradores del grupo.`, 
-botAdmin: `『✦』Para ejecutar el comando *${comando}* debo ser administrador del grupo.`,
-unreg: `『✦』El comando *${comando}* solo puede ser usado por los usuarios registrado, registrate usando:\n> » #${verifyaleatorio} ${user2}.${edadaleatoria}`,
-restrict: `『✦』Esta caracteristica está desactivada.`
+rowner: `❀ *Acceso Denegado*
+➪ El comando *${comando}* solo puede ser usado por los *creadores del bot*.`,
+
+owner: `❀ *Acceso Denegado*
+➪ El comando *${comando}* solo puede ser usado por los *desarrolladores del bot*.`,
+
+mods: `❀ *Acceso Denegado*
+➪ El comando *${comando}* solo puede ser usado por los *moderadores del bot*.`,
+
+premium: `❀ *Acceso Denegado*
+➪ El comando *${comando}* solo puede ser usado por los *usuarios premium*.`,
+
+group: `❀ *Solo en Grupos*
+➪ El comando *${comando}* está limitado a *grupos*.`,
+
+private: `❀ *Solo en Privado*
+➪ El comando *${comando}* solo puede ser usado en el *chat privado del bot*.`,
+
+admin: `❀ *Acceso Denegado*
+➪ El comando *${comando}* está limitado a los *administradores del grupo*.`,
+
+botAdmin: `❀ *Permisos Insuficientes*
+➪ Para ejecutar *${comando}*, debo ser *administrador del grupo*.`,
+
+unreg: `❀ *Registro Requerido*
+➪ El comando *${comando}* solo está disponible para usuarios *registrados*.
+> » #${verifyaleatorio} ${user2}.${edadaleatoria}`,
+
+restrict: `❀ *Función Restringida*
+➪ Esta característica está *desactivada* en este momento.`
 }[type];
 if (msg) return m.reply(msg).then(_ => m.react('✖️'))}
 
