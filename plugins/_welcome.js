@@ -38,7 +38,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 > › Ahora somos *${groupSize}* en el grupo
 > › ${global.welcom1 || 'Pásala chido, saluda y participa'}
 > › Usa *#menu* para ver los comandos`
-    await conn.sendMini(m.chat, '🌷 *¡Nuevo miembro!* 🌷', global.dev, bienvenida, img, img, global.redes, fkontak)
+    await conn.sendMini(m.chat, 'Nuevo miembro', global.dev, bienvenida, img, img, global.redes, fkontak)
   }
 
   if (chat.welcome && (m.messageStubType == 28 || m.messageStubType == 32)) {
@@ -52,6 +52,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
 > › Ahora somos *${groupSize}* miembros
 > › ${global.welcom2 || 'Vuelve pronto, te vamos a extrañar'}
 > › Usa *#help* si necesitas algo`
-    await conn.sendMini(m.chat, '🌷 *Alguien salió del grupo* 🌷', global.dev, despedida, img, img, global.redes, fkontak)
+    await conn.sendMini(m.chat, 'Alguien salió del grupo', global.dev, despedida, img, img, global.redes, fkontak)
   }
 }
