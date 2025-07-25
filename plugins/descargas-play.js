@@ -30,13 +30,11 @@ const handler = async (m, { conn, text, command }) => {
     // Mensaje de info decorado
     let infoMsg = `
 ❀ *Información de descarga*
-
 ➪ *Usuario ›* @${userId.split('@')[0]}
 
 > ✧ *Título ›* ${title}
 > ✧ *Tipo ›* ${["play", "pl", "yta", "ytmp3", "playaudio"].includes(command) ? "Audio" : "Video"}
 > ✧ *Link ›* ${url}
-> ✧ *Bot ›* ${botname}
 `
 
     await conn.sendMessage(m.chat, {
