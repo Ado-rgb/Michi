@@ -53,7 +53,7 @@ let handler = async (m, { conn }) => {
     msg += `✩ 𝙑𝙖𝙡𝙤𝙧  › *${randomChar.value}*\n`
     msg += `✩ 𝙀𝙨𝙩𝙖𝙙𝙤 › *${estado}*\n`
     msg += `✩ 𝙁𝙪𝙚𝙣𝙩𝙚 › *${randomChar.source}*\n`
-    msg += `✩ 𝙄𝘿    › *${randomChar.id}*\n\n`
+    msg += `✩ ID  › ${randomChar.id}\n\n`
 
     msg += `> Reclama con *c*\n`
     msg += `> Para tirar otra vez › *#rw*\n`
