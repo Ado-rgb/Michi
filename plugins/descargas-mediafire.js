@@ -19,7 +19,7 @@ const handler = async (m, { conn, text, command }) => {
     if (!ytplay2) return m.reply('✧ No encontré nada de eso.')
 
     const { title, url } = ytplay2
-    const groupLink = (global.hyd_gcbot && global.hyd_gcbot[1]) || 'https://whatsapp.com/channel/0029VbArz9fAO7RGy2915k3O'
+    const groupLink = (global.hyd_gcbot && global.hyd_gcbot[1]) || 'https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c?mode=r_t'
 
     // Armar mensaje interactivo con botón URL usando proto
     const messageContent = {
