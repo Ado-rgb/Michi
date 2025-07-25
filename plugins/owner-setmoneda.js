@@ -7,7 +7,7 @@ let handler = async (m, { conn, text, isRowner }) => {
 };
 
 handler.help = ['setmoneda'];
-handler.tags = ['tools'];
+handler.tags = ['owner'];
 handler.command = ['setmoneda'];
 handler.rowner = true;
 
