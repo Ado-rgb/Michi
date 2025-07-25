@@ -5,21 +5,17 @@ const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-z
 
 const handler = async (m, { conn, text, command }) => {
   try {
-    if (!text.trim()) {
-      return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
-    }
+    if (!text.trim()) return conn.reply(m.chat, `❀ Porfa escribe el nombre o link de la música`, m)
 
     let videoIdToFind = text.match(youtubeRegexID) || null
     let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
 
     if (videoIdToFind) {
       const videoId = videoIdToFind[1]
-      ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
+      ytplay2 = ytplay2.all.find(i => i.videoId === videoId) || ytplay2.videos.find(i => i.videoId === videoId)
     }
     ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2
-    if (!ytplay2 || ytplay2.length == 0) {
-      return m.reply('✧ No se encontraron resultados para tu búsqueda.')
-    }
+    if (!ytplay2) return m.reply('✧ No encontré nada de eso.')
 
     const { title, url } = ytplay2
     const botname = global.wm || 'MiBot'
@@ -33,7 +29,7 @@ const handler = async (m, { conn, text, command }) => {
         mentionedJid: [m.sender],
         externalAdReply: {
           title: botname,
-          body: botBody,
+          body: `🔗 ${botBody}`,  // Este texto sale como “botón”
           mediaType: 1,
           mediaUrl: gcbot_short,
           sourceUrl: gcbot_short,
@@ -47,19 +43,19 @@ const handler = async (m, { conn, text, command }) => {
 
     if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
       const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
-      if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar el enlace de audio.')
+      if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar enlace audio.')
       await conn.sendMessage(m.chat, { audio: { url: api.result.download.url }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
     } else if (['play2', 'ytv', 'ytmp4', 'mp4'].includes(command)) {
       const res = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
       const json = await res.json()
-      if (!json.success || !json.data?.download) throw new Error('No se pudo obtener el enlace de descarga')
+      if (!json.success || !json.data?.download) throw new Error('No se pudo obtener enlace video')
       await conn.sendFile(m.chat, json.data.download, `${json.data.title}.mp4`, title, m)
     } else {
-      return conn.reply(m.chat, '✧︎ Comando no reconocido.', m)
+      return conn.reply(m.chat, '✧ Comando no reconocido.', m)
     }
 
-  } catch (error) {
-    return m.reply(`⚠︎ Ocurrió un error: ${error.message}`)
+  } catch (e) {
+    return m.reply(`⚠ Ocurrió un error: ${e.message}`)
   }
 }
 
