@@ -35,11 +35,7 @@ let handler = async (m, { conn }) => {
   }, { quoted: m });
 
   // Mensaje decorado
-  let txt = `✎ *Hola ${username}*\n\n` +
-            `Estos son los contactos oficiales:\n\n` +
-            `• +504 9373-2693\n` +
-            `• +58 424-2773183\n\n` +
-            ``;
+  let txt = `✎ *Hola ${username} Aquí tienes los contactos de mis devs.*\n\n`;
 
   await conn.sendMessage(m.chat, { text: txt }, { quoted: m });
 };
