@@ -41,7 +41,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           body: dev,
           mediaType: 1,
           previewType: 0,
-          mediaUrl: url,
+          mediaUrl: 'https://chat.whatsapp.com/DMTjbGxYv5R7YSzmFHfO5c?mode=r_t',
           thumbnail: thumb,
           renderLargerThumbnail: true,
         },
