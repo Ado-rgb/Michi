@@ -21,7 +21,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
   let userJid = m.messageStubParameters[0]
   let pp = await conn.profilePictureUrl(userJid, 'image').catch(_ => 'https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1745522645448.jpeg')
-  let img = await (await fetch(pp)).buffer()
   let chat = global.db.data.chats[m.chat]
 
   let groupSize = participants.length
@@ -40,7 +39,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
 > › ${global.welcom1 || 'Pásala chido, saluda y participa'}
 > › Usa *#menu* para ver los comandos`
     await conn.sendMessage(m.chat, { 
-      text: bienvenida,
+      image: { url: pp },
+      caption: bienvenida,
       mentions: [userJid]
     }, { quoted: fkontak })
   }
@@ -57,7 +57,8 @@ export async function before(m, { conn, participants, groupMetadata }) {
 > › ${global.welcom2 || 'Vuelve pronto, te vamos a extrañar'}
 > › Usa *#help* si necesitas algo`
     await conn.sendMessage(m.chat, { 
-      text: despedida,
+      image: { url: pp },
+      caption: despedida,
       mentions: [userJid]
     }, { quoted: fkontak })
   }
