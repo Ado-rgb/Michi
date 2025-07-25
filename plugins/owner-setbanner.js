@@ -51,7 +51,7 @@ const isImageValid = (buffer) => {
 };
 
 handler.help = ['setbanner'];
-handler.tags = ['tools'];
+handler.tags = ['owner'];
 handler.command = ['setbanner'];
 handler.rowner = true;
 
