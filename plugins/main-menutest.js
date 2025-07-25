@@ -21,7 +21,7 @@ let handler = async (m, { conn }) => {
     for (let cmd of groups[tag]) {
       menu += `│ ꕥ › *${prefix}${cmd}*\n`
     }
-    menu += `╰──────────────────────╯\n`
+    menu += `╰───────────────────╯\n`
   }
 
   // enviar con imagen global.banner
