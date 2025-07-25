@@ -1,85 +1,77 @@
-import fetch from "node-fetch"
-import yts from 'yt-search'
-import { proto, generateWAMessageFromContent } from '@whiskeysockets/baileys'
+const frases = [
+  'No dejes para mañana lo que puedas hacer hoy.',
+  'El éxito es la suma de pequeños esfuerzos repetidos día tras día.',
+  'La vida es 10% lo que te pasa y 90% cómo reaccionas a ello.',
+  'El que quiere celeste que le cueste.',
+  'Haz lo que amas y no trabajarás ni un solo día de tu vida.',
+  'El que busca encuentra, pero el que no busca no se queja.',
+  'Cuando una puerta se cierra, otra se abre.',
+  'Si no luchas por lo que quieres, no llores por lo que pierdes.'
+]
 
-const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
-
-const handler = async (m, { conn, text, command }) => {
+const handler = async (m, { conn, command }) => {
   try {
-    if (!text.trim()) return conn.reply(m.chat, `❀ Porfa escribe el nombre o link de la música`, m)
-
-    let videoIdToFind = text.match(youtubeRegexID) || null
-    let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
-
-    if (videoIdToFind) {
-      const videoId = videoIdToFind[1]
-      ytplay2 = ytplay2.all.find(i => i.videoId === videoId) || ytplay2.videos.find(i => i.videoId === videoId)
-    }
-    ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2
-    if (!ytplay2) return m.reply('✧ No encontré nada de eso.')
-
-    const { title, url } = ytplay2
-    const groupLink = (global.hyd_gcbot && global.hyd_gcbot[1]) || 'https://myapiadonix.vercel.app'
-
-    // Armar mensaje interactivo con botón URL usando proto
-    const messageContent = {
-      viewOnceMessage: {
-        message: {
-          messageContextInfo: {
-            deviceListMetadata: {},
-            deviceListMetadataVersion: 2
-          },
-          interactiveMessage: proto.Message.InteractiveMessage.create({
-            body: proto.Message.InteractiveMessage.Body.create({
-              text: `✅ *Subida exitosa*\n${title}\n\nPulsa el botón para unirte al grupo`
-            }),
-            footer: proto.Message.InteractiveMessage.Footer.create({
-              text: 'Michino Ai 🦈'
-            }),
-            header: proto.Message.InteractiveMessage.Header.create({
-              hasMediaAttachment: false
-            }),
-            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-              buttons: [
-                {
-                  name: 'cta_url',
-                  buttonParamsJson: JSON.stringify({
-                    display_text: 'Visitar Adonix API',
-                    url: groupLink,
-                    merchant_url: groupLink
-                  })
-                }
-              ]
-            })
-          })
+    if (command === 'fraseslista') {
+      // Lista interactiva con todas las frases
+      const sections = [
+        {
+          title: 'Frases chidas',
+          rows: frases.map((frase, i) => ({
+            title: `Frase #${i + 1}`,
+            description: frase,
+            rowId: `frase_select ${i}`
+          }))
         }
-      }
-    }
+      ]
 
-    const msg = generateWAMessageFromContent(m.chat, messageContent, { quoted: m })
-    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
+      await conn.sendMessage(m.chat, {
+        text: 'Selecciona una frase para verla:',
+        footer: 'Bot de frases secretas',
+        title: 'Frases super chidas',
+        buttonText: 'Elige una frase',
+        sections
+      }, { quoted: m })
 
-    // Ahora envía el audio o video según comando
-    if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
-      const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
-      if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar enlace audio.')
-      await conn.sendMessage(m.chat, { audio: { url: api.result.download.url }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
-    } else if (['play2', 'ytv', 'ytmp4', 'mp4'].includes(command)) {
-      const res = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
-      const json = await res.json()
-      if (!json.success || !json.data?.download) throw new Error('No se pudo obtener enlace video')
-      await conn.sendFile(m.chat, json.data.download, `${json.data.title}.mp4`, title, m)
+    } else if (command === 'frase_select') {
+      const args = m.text.split(' ')
+      const index = parseInt(args[1])
+      if (isNaN(index) || index < 0 || index >= frases.length) return m.reply('❌ Frase no válida.')
+
+      const frase = frases[index]
+      await conn.sendMessage(m.chat, { text: `✨ Aquí tienes la frase:\n\n${frase}` }, { quoted: m })
+
+    } else if (command === 'botonsecreto') {
+      // Botones secretos
+      const buttons = [
+        { buttonId: 'secreto1', buttonText: { displayText: '🔐 Secreto 1' }, type: 1 },
+        { buttonId: 'secreto2', buttonText: { displayText: '🔒 Secreto 2' }, type: 1 }
+      ]
+
+      await conn.sendMessage(m.chat, {
+        text: 'Aquí están los botones secretos, dale clic al que quieras',
+        footer: 'Botonera secreta',
+        buttons,
+        headerType: 1
+      }, { quoted: m })
+
+    } else if (command === 'secreto1') {
+      await conn.sendMessage(m.chat, { text: '¡Has descubierto el secreto 1! 🎉' }, { quoted: m })
+
+    } else if (command === 'secreto2') {
+      await conn.sendMessage(m.chat, { text: '¡Has desbloqueado el secreto 2! 🔥' }, { quoted: m })
+
     } else {
-      return conn.reply(m.chat, '✧ Comando no reconocido.', m)
+      await m.reply('Comando no reconocido.')
     }
 
   } catch (e) {
-    return m.reply(`⚠ Ocurrió un error: ${e.message}`)
+    console.error(e)
+    m.reply('❌ Error en el comando de frases.')
   }
 }
 
-handler.command = handler.help = ['play', 'pl']
-handler.tags = ['descargas']
-handler.group = true
+handler.command = ['fraseslista', 'frase_select', 'botonsecreto', 'secreto1', 'secreto2']
+handler.tags = ['diversión']
+handler.group = false
 
 export default handler
