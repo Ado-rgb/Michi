@@ -27,14 +27,25 @@ const handler = async (m, { conn, text, command }) => {
     // Miniatura real del video
     const thumbBuffer = await (await fetch(thumbnail)).buffer()
 
-    // Mensaje con externalAdReply usando miniatura del video
+    // Mensaje de info decorado
+    let infoMsg = `
+❀ *Información de descarga*
+
+➪ *Usuario ›* @${userId.split('@')[0]}
+
+> ✧ *Título ›* ${title}
+> ✧ *Tipo ›* ${["play", "pl", "yta", "ytmp3", "playaudio"].includes(command) ? "Audio" : "Video"}
+> ✧ *Link ›* ${url}
+> ✧ *Bot ›* ${botname}
+`
+
     await conn.sendMessage(m.chat, {
-      text: `> *🔰 Enviando*\n> ${title}`,
+      text: infoMsg,
+      mentions: [userId],
       contextInfo: {
-        mentionedJid: [userId],
         externalAdReply: {
-          title: '🕒 Procesando tu solicitud..',
-          body: textbot,
+          title: 'Procesando tu solicitud..',
+          body: global.textbot || 'Shadow Ultra Edited',
           mediaType: 1,
           mediaUrl: redes,
           thumbnail: thumbBuffer,
@@ -53,7 +64,7 @@ const handler = async (m, { conn, text, command }) => {
         audio: { url: api.result.download.url },
         fileName: `${api.result.title}.mp3`,
         mimetype: "audio/mpeg",
-        ptt: true
+        ptt: false
       }, { quoted: m })
     } else if (["play2", "ytv", "ytmp4", "mp4"].includes(command)) {
       const res = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
