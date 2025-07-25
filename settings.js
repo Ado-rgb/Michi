@@ -53,12 +53,12 @@ global.botname = '✿ ꕥ Mai ꕥ ✿'
 global.wm = '⚥ ʷᵃ ᴹᵃⁱ ⚥'
 global.author = '⛁ Created with by Ado, yosue ✧'
 global.dev = '✦ Powered by Ado ✦'
-global.textbot = 'ꕥ Mai | Made with by choquitos'
+global.textbot = 'ꕥ Mai | Made with by Ado, Yosue'
 global.etiqueta = 'Yosue | Ado ⚡'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.moneda = '¥enes'
+global.moneda = 'CoffeeCoins'
 global.welcom1 = '❍ Edita Con El Comando setwelcome'
 global.welcom2 = '❍ Edita Con El Comando setbye'
 global.banner = 'https://files.catbox.moe/di67wp.jpg'
