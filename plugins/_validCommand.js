@@ -1,20 +1,22 @@
 export async function before(m) {
-  if (!m.text || !global.prefix.test(m.text)) return
+  if (!m.text) return
+  if (!global.prefix.test(m.text)) return
 
-  const usedPrefix = global.prefix.exec(m.text)[0]
+  const prefixMatch = global.prefix.exec(m.text)
+  if (!prefixMatch) return
+
+  const usedPrefix = prefixMatch[0]
   const command = m.text.slice(usedPrefix.length).trim().split(' ')[0].toLowerCase()
+  if (!command) return
+  if (command === 'bot') return
 
   const validCommand = (command, plugins) => {
     for (let plugin of Object.values(plugins)) {
-      if (plugin.command && (Array.isArray(plugin.command) ? plugin.command : [plugin.command]).includes(command)) {
-        return true
-      }
+      let cmds = Array.isArray(plugin.command) ? plugin.command : [plugin.command]
+      if (cmds && cmds.includes(command)) return true
     }
     return false
   }
-
-  if (!command) return
-  if (command === "bot") return
 
   if (validCommand(command, global.plugins)) {
     let chat = global.db.data.chats[m.chat]
@@ -28,6 +30,9 @@ export async function before(m) {
     user.commands += 1
   } else {
     const comando = m.text.trim().split(' ')[0]
-    await m.reply(`✖ El comando *${comando}* no existe o está fuera de servicio.\n\n💡 *Tip:* Usa \`${usedPrefix}help\` para ver la lista de comandos disponibles.`, m)
+    await m.reply(
+      `✖ El comando *${comando}* no existe o está fuera de servicio.\n\n💡 *Tip:* Usa \`${usedPrefix}help\` para ver la lista de comandos disponibles.`,
+      m
+    )
   }
 }
