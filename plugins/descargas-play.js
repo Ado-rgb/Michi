@@ -42,7 +42,7 @@ const handler = async (m, { conn, text, command }) => {
       contextInfo: {
         externalAdReply: {
           title: '✰ Procesando tu solicitud..',
-          body: global.textbot || 'Shadow Ultra Edited',
+          body: global.textbot || '🕐',
           mediaType: 1,
           mediaUrl: redes,
           thumbnail: thumbBuffer,
