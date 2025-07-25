@@ -1,65 +1,78 @@
 import fetch from "node-fetch"
-import yts from 'yt-search'
+import yts from "yt-search"
 
 const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 
 const handler = async (m, { conn, text, command }) => {
   try {
-    if (!text.trim()) {
-      return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
+    if (!text?.trim()) {
+      return conn.reply(m.chat, "❀ *Por favor escribe el nombre o link de la música a descargar*", m)
     }
 
-    let videoIdToFind = text.match(youtubeRegexID) || null
-    let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
+    // Buscar video
+    const videoIdMatch = text.match(youtubeRegexID)
+    let ytResult = await yts(videoIdMatch ? `https://youtu.be/${videoIdMatch[1]}` : text)
 
-    if (videoIdToFind) {
-      const videoId = videoIdToFind[1]
-      ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
+    if (videoIdMatch) {
+      ytResult = ytResult.all.find(v => v.videoId === videoIdMatch[1]) || ytResult.videos.find(v => v.videoId === videoIdMatch[1])
     }
-    ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2
-    if (!ytplay2 || ytplay2.length == 0) {
-      return m.reply('✧ No se encontraron resultados para tu búsqueda.')
-    }
+    ytResult = ytResult.all?.[0] || ytResult.videos?.[0] || ytResult
+    if (!ytResult) return m.reply("✧ No se encontraron resultados.")
 
-    let { title, thumbnail, url } = ytplay2
-    const thumb = (await conn.getFile(thumbnail)).data
+    const { title, url, thumbnail } = ytResult
+    const botname = global.botname || "Michino Ai"
+    const textbot = "Tu bot de música favorito"
+    const redes = "https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau"
+    const userId = m.sender
 
+    // Miniatura real del video
+    const thumbBuffer = await (await fetch(thumbnail)).buffer()
+
+    // Mensaje con externalAdReply usando miniatura del video
     await conn.sendMessage(m.chat, {
-      text: `✅ *Subida exitosa*\n${title}`,
+      text: `> *🔰 Enviando*\n> ${title}`,
       contextInfo: {
+        mentionedJid: [userId],
         externalAdReply: {
-          title: global.wm,
-          body: 'Michino Ai 🦈',
-          mediaUrl: 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau',
-          sourceUrl: 'https://github.com/Ado926',
-          thumbnailUrl: 'https://files.catbox.moe/h3lk3c.jpg',
-          mediaType: 2,
-          renderLargerThumbnail: false,
-          jpegThumbnail: thumb
+          title: botname,
+          body: textbot,
+          mediaType: 1,
+          mediaUrl: redes,
+          sourceUrl: redes,
+          thumbnail: thumbBuffer,
+          showAdAttribution: false,
+          containsAutoReply: true,
+          renderLargerThumbnail: true
         }
       }
     }, { quoted: m })
 
-    if (['play', 'pl', 'yta', 'ytmp3', 'playaudio'].includes(command)) {
+    // Enviar audio o video
+    if (["play", "pl", "yta", "ytmp3", "playaudio"].includes(command)) {
       const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
-      if (!api.result?.download?.url) throw new Error('⚠ No se pudo generar el enlace de audio.')
-      await conn.sendMessage(m.chat, { audio: { url: api.result.download.url }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
-    } else if (['play2', 'ytv', 'ytmp4', 'mp4'].includes(command)) {
+      if (!api.result?.download?.url) throw new Error("⚠ No se pudo generar el enlace de audio.")
+      await conn.sendMessage(m.chat, {
+        audio: { url: api.result.download.url },
+        fileName: `${api.result.title}.mp3`,
+        mimetype: "audio/mpeg"
+      }, { quoted: m })
+    } else if (["play2", "ytv", "ytmp4", "mp4"].includes(command)) {
       const res = await fetch(`https://myapiadonix.vercel.app/api/ytmp4?url=${url}`)
       const json = await res.json()
-      if (!json.success || !json.data?.download) throw new Error('No se pudo obtener el enlace de descarga')
+      if (!json.success || !json.data?.download) throw new Error("No se pudo obtener el enlace de video.")
       await conn.sendFile(m.chat, json.data.download, `${json.data.title}.mp4`, title, m)
     } else {
-      return conn.reply(m.chat, '✧︎ Comando no reconocido.', m)
+      return conn.reply(m.chat, "✧ Comando no reconocido.", m)
     }
 
-  } catch (error) {
-    return m.reply(`⚠︎ Ocurrió un error: ${error.message}`)
+  } catch (e) {
+    console.error(e)
+    return m.reply(`⚠ Ocurrió un error: ${e.message}`)
   }
 }
 
-handler.command = handler.help = ['play', 'pl']
-handler.tags = ['descargas']
+handler.command = handler.help = ["play", "play2", "ytmp3", "ytmp4"]
+handler.tags = ["descargas"]
 handler.group = true
 
 export default handler
