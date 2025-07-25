@@ -33,7 +33,7 @@ var handler = async (m, { conn }) => {
 > 👥 *Grupos activos ›* ${groups.length}
 > 🏆 *RAM en uso ›* ${format(totalmem() - freemem())} / ${format(totalmem())}
 
-© mᥲძᥱ ᥕі𝗍һ ᑲᥡ *Ado, Yosue*
+✿ mᥲძᥱ ᥕі𝗍һ ᑲᥡ *Ado, Yosue*
 `.trim()
 
   await m.react('✈️')
