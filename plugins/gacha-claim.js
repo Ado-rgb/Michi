@@ -34,15 +34,19 @@ let handler = async (m, { conn }) => {
     const remainingTime = Math.ceil((cooldowns[userId] - now) / 1000);
     const min = Math.floor(remainingTime / 60);
     const sec = remainingTime % 60;
-    return await conn.reply(m.chat, `《✧》Debes esperar *${min} minutos y ${sec} segundos* para volver a usar *#c*`, m);
+    return await conn.reply(
+      m.chat,
+      `《✧》Debes esperar *${min} minutos y ${sec} segundos* para volver a usar *#c*`,
+      m
+    );
   }
 
   if (!m.quoted || m.quoted.sender !== conn.user.jid) {
     return await conn.reply(m.chat, '《✧》Debes citar un personaje válido enviado por el bot.', m);
   }
 
-  // Extraer ID desde el mensaje citado
-  const characterIdMatch = m.quoted.text.match(/ID:\s?\*(.+?)\*/);
+  // Regex corregida para extraer ID con espacios y símbolo ›
+  const characterIdMatch = m.quoted.text.match(/ID\s*›\s*\*(.+?)\*/i);
   if (!characterIdMatch) {
     return await conn.reply(m.chat, '《✧》No se encontró un ID válido en el mensaje citado.', m);
   }
@@ -53,7 +57,7 @@ let handler = async (m, { conn }) => {
     const characters = await loadCharacters();
     const harem = await loadHarem();
 
-    const character = characters.find(c => c.id === characterId);
+    const character = characters.find((c) => c.id === characterId);
     if (!character) {
       return await conn.reply(m.chat, '《✧》El personaje con ese ID no existe.', m);
     }
@@ -73,7 +77,7 @@ let handler = async (m, { conn }) => {
 
     // Guardar en harem.json
     if (!harem[userId]) harem[userId] = [];
-    if (!harem[userId].some(p => p.id === character.id)) {
+    if (!harem[userId].some((p) => p.id === character.id)) {
       harem[userId].push(character);
     }
 
@@ -84,9 +88,8 @@ let handler = async (m, { conn }) => {
     cooldowns[userId] = now + 30 * 60 * 1000;
 
     await conn.reply(m.chat, `✦ Has reclamado a *${character.name}* con éxito.`, m);
-
   } catch (err) {
-    console.error(err)
+    console.error(err);
     await conn.reply(m.chat, `✘ Error al reclamar: ${err.message}`, m);
   }
 };
