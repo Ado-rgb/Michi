@@ -23,7 +23,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 │ ꕥ › *Descripción:* ${result.description || 'Sin descripción'}
 │ ꕥ › *Creado:* ${result.createdAt}
 │ ꕥ › *Link:* ${result.cloneUrl}
-╰───────────────────────────╯`;
+╰───────────────────────╯`;
 
     let img = 'https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1745610598914.jpeg';
 
