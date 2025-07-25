@@ -55,7 +55,7 @@ let handler = async (m, { conn }) => {
     msg += `✩ 𝙁𝙪𝙚𝙣𝙩𝙚 › *${randomChar.source}*\n`
     msg += `✩ 𝙄𝘿    › *${randomChar.id}*\n\n`
 
-    msg += `> ────── Página *1* de *1*\n`
+    msg += `> Reclama con *c*\n`
     msg += `> Para tirar otra vez › *#rw*\n`
 
     const mentions = userEntry ? [userEntry.userId] : []
