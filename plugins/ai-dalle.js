@@ -1,30 +1,49 @@
-// - OfcKing >> https://github.com/OfcKing
+import fetch from 'node-fetch'
 
-import axios from 'axios';
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+  const prompt = args.join(' ')
+  if (!prompt) return m.reply(
+`❀ *Generador de Imágenes AI*
 
-const handler = async (m, { conn, args }) => {
-    if (!args[0]) {
-        await conn.reply(m.chat, `${emoji} Por favor, proporciona una descripción para generar la imagen.`, m);
-        return;
-    }
+➪ *Uso Correcto ›*
+> ${usedPrefix + command} <texto para la imagen>
 
-    const prompt = args.join(' ');
-    const apiUrl = `https://eliasar-yt-api.vercel.app/api/ai/text2img?prompt=${prompt}`;
+*Ejemplo ›*
+> ${usedPrefix + command} gato kawaii con fondo rosa`
+  )
 
-    try {
-        conn.reply(m.chat, `${emoji2} Espere un momento...`, m)
+  try {
+    await m.react('🕒')
 
-        const response = await axios.get(apiUrl, { responseType: 'arraybuffer' });
+    const api = `https://myapiadonix.vercel.app/api/IAimagen?prompt=${encodeURIComponent(prompt)}`
+    const res = await fetch(api)
+    const json = await res.json()
 
-        await conn.sendMessage(m.chat, { image: Buffer.from(response.data) }, { quoted: m });
-    } catch (error) {
-        console.error('Error al generar la imagen:', error);
-        await conn.reply(m.chat, `${msm} No se pudo generar la imagen, intenta nuevamente mas tarde.`, m);
-    }
-};
+    if (json.status !== 200 || !json.result?.image)
+      throw new Error('No se pudo generar la imagen')
 
-handler.command = ['dalle'];
-handler.help = ['dalle'];
-handler.tags = ['tools'];
+    await conn.sendMessage(m.chat, {
+      image: { url: json.result.image },
+      caption: `
+❀ *Imagen Generada*
 
-export default handler;
+➪ *Prompt ›* ${prompt}
+> API: *Adonix AI*
+`.trim()
+    }, { quoted: m })
+
+    await m.react('✅')
+
+  } catch (e) {
+    console.error('Error generando imagen:', e)
+    await m.react('✖️')
+    m.reply('⚠︎ Ocurrió un error al generar la imagen. Intenta de nuevo más tarde.')
+  }
+}
+
+handler.command = ['dalle']
+handler.help = ['dalle <texto>']
+handler.tags = ['ia']
+handler.register = true
+
+export default handler
