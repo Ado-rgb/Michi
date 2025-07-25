@@ -1,10 +1,42 @@
 import fetch from 'node-fetch'
 
+const orderedTags = [
+  'main',
+  'nable',
+  'tools',
+  'ai',
+  'fun',
+  'anime',
+  'buscador',
+  'descargas',
+  'dl',
+  '+18',
+  'transformador',
+  'downloader',
+  'gacha',
+  'game',
+  'games',
+  'group',
+  'grupo',
+  'owner',
+  'info',
+  'serbot',
+  'nsfw',
+  'emox',
+  'mods',
+  'rg',
+  'rpg',
+  'economia',
+  'economy',
+  'sticker',
+  'herramientas',
+]
+
 let handler = async (m, { conn }) => {
-  let name = m.pushName || m.sender.split('@')[0] // evitar null
+  let name = m.pushName || m.sender.split('@')[0]
   let prefix = (global.prefix && global.prefix[0]) ? global.prefix[0] : '.'
 
-  let menu = `> Hola @${name}, bienvenido/a al menú de *${botname}*\n\n`
+  let menu = `> Hola @${name}, bienvenido/a al menú de *${global.botname}*\n\n`
 
   // agrupar comandos por tags
   let groups = {}
@@ -16,9 +48,9 @@ let handler = async (m, { conn }) => {
     }
   }
 
-  // construir menú decorado
-  for (let tag in groups) {
-    if (!groups[tag].length) continue
+  // construir menú decorado con tags ordenados
+  for (let tag of orderedTags) {
+    if (!groups[tag] || !groups[tag].length) continue
     menu += `╭─⋆˚✿˖° ❀ *${tag.toUpperCase()}* ❀ ⋆˚✿˖°─╮\n`
     for (let cmd of groups[tag]) {
       menu += `│ ꕥ › *${prefix}${cmd}*\n`
@@ -32,11 +64,12 @@ let handler = async (m, { conn }) => {
     contextInfo: {
       mentionedJid: [m.sender],
       externalAdReply: {                
-        title: botname,
-        body: textbot,
+        title: global.botname,
+        body: global.textbot,
         mediaType: 1,
-        mediaUrl: redes,
-        thumbnail: await (await fetch(banner)).buffer(),
+        mediaUrl: global.redes,
+        sourceUrl: global.redes,
+        thumbnail: await (await fetch(global.banner)).buffer(),
         showAdAttribution: false,
         containsAutoReply: true,
         renderLargerThumbnail: true
