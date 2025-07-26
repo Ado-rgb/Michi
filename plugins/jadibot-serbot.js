@@ -1,14 +1,12 @@
-const { useMultiFileAuthState, DisconnectReason, makeCacheableSignalKeyStore, fetchLatestBaileysVersion, Browsers } = (await import("@whiskeysockets/baileys"));
+const { useMultiFileAuthState, makeCacheableSignalKeyStore, fetchLatestBaileysVersion, Browsers } = (await import("@whiskeysockets/baileys"));
 import qrcode from "qrcode"
 import NodeCache from "node-cache"
 import fs from "fs"
 import path from "path"
 import pino from 'pino'
 import chalk from 'chalk'
-import util from 'util'
 import * as ws from 'ws'
-const { child, spawn, exec } = await import('child_process')
-const { CONNECTING } = ws
+const { exec } = await import('child_process')
 import { makeWASocket } from '../lib/simple.js'
 import { fileURLToPath } from 'url'
 
@@ -82,7 +80,7 @@ handler.command = ['qr', 'code']
 export default handler
 
 export async function yukiJadiBot(options) {
-  let { pathYukiJadiBot, m, conn, args, usedPrefix, command } = options
+  let { pathYukiJadiBot, m, conn, args, command } = options
   if (command === 'code') {
     command = 'qr'
     args.unshift('code')
@@ -94,11 +92,14 @@ export async function yukiJadiBot(options) {
   const pathCreds = path.join(pathYukiJadiBot, "creds.json")
   if (!fs.existsSync(pathYukiJadiBot)) fs.mkdirSync(pathYukiJadiBot, { recursive: true })
 
-  try {
-    args[0] && fs.writeFileSync(pathCreds, JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, '\t'))
-  } catch {
-    conn.reply(m.chat, `⚠️ Use correctamente el comando » ${usedPrefix + command} --code`, m)
-    return
+  // Solo intenta guardar credenciales si args[0] existe y no está vacío
+  if (args[0] && args[0].length > 0) {
+    try {
+      fs.writeFileSync(pathCreds, JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, '\t'))
+    } catch {
+      conn.reply(m.chat, `⚠️ No se pudieron cargar las credenciales. Intenta nuevamente.`, m)
+      return
+    }
   }
 
   const comb = Buffer.from(crm1 + crm2 + crm3 + crm4, "base64")
@@ -169,7 +170,7 @@ export async function yukiJadiBot(options) {
               mentionedJid: [userJid],
               externalAdReply: {
                 title: 'ꕥ New Subbot',
-                body: 'Se detecto un nuevo socket',
+                body: 'Se detectó un nuevo socket',
                 mediaType: 1,
                 thumbnailUrl: 'https://files.catbox.moe/72n6g8.jpg',
                 renderLargerThumbnail: true
