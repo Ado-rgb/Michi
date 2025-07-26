@@ -50,7 +50,7 @@ https://whatsapp.com/channel/0029VbBDu5I4inohjBLO2s14
 
 ⟣ ${dev}`
 
-  await m.react('📩')
+  await m.react('🔰')
 
   const redes = channel // tu enlace del canal
   const thumbBuffer = await (await fetch(pp)).buffer()
