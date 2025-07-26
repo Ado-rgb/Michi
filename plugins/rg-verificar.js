@@ -56,6 +56,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   const thumbBuffer = await (await fetch(pp)).buffer()
   const userId = m.sender
 
+  // mensaje al chat del usuario
   await conn.sendMessage(m.chat, {
     text: infoMsg,
     mentions: [userId],
@@ -72,6 +73,23 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
       }
     }
   }, { quoted: m })
+
+  // mensaje al canal (con foto de perfil y externalAdReply)
+  await conn.sendMessage('120363417850505113@newsletter', {
+    image: { url: pp },
+    caption: `ᰔᩚ Nuevo usuario registrado:\n\n• *Nombre:* ${name}\n• *Edad:* ${age} años\n• ID: ${userId}`,
+    contextInfo: {
+      externalAdReply: {
+        title: '✧ New User ✦',
+        body: 'Se acaba de registrar un nuevo usuario',
+        mediaType: 1,
+        mediaUrl: redes,
+        thumbnail: thumbBuffer,
+        showAdAttribution: false,
+        renderLargerThumbnail: true
+      }
+    }
+  })
 }
 
 handler.help = ['reg']
