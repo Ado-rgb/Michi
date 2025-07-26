@@ -175,7 +175,7 @@ Sistema multibot actualizado.`
                 title: '⚙️ Sistema Multibot',
                 body: 'Aviso del bot principal',
                 mediaType: 1,
-                thumbnailUrl: 'https://files.catbox.moe/xr2m6u.jpg',
+                thumbnailUrl: 'https://files.catbox.moe/72n6g8.jpg',
                 renderLargerThumbnail: true
               }
             }
