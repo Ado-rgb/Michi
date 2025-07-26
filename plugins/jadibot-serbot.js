@@ -97,7 +97,7 @@ export async function yukiJadiBot(options) {
   try {
     args[0] && fs.writeFileSync(pathCreds, JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, '\t'))
   } catch {
-    conn.reply(m.chat, `⚠️ Use correctamente el comando » ${usedPrefix + command} code`, m)
+    conn.reply(m.chat, `⚠️ Use correctamente el comando » ${usedPrefix + command} --code`, m)
     return
   }
 
