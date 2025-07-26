@@ -157,23 +157,19 @@ export async function yukiJadiBot(options) {
         if (global.conn && global.conn.sendMessage) {
           const fecha = new Date().toLocaleString('es-ES', { timeZone: 'America/Tegucigalpa' })
           const aviso = `ꕥ *Nuevo Sub-Bot Conectado*
-
-❒ Principal › *Mai - MD*
 ✿ Sub-Bots Activos › *${global.conns.length}*
 
 ✎ *Detalles ›*
 - [Sub *${userName}*] › @⁨${userJid.split('@')[0]}⁩
-  ⌛ *Conectado ›* ${fecha}
-
-Sistema multibot actualizado.`
+  ⌛ *Conectado ›* ${fecha}`
 
           await global.conn.sendMessage('120363417850505113@newsletter', {
             text: aviso,
             contextInfo: {
               mentionedJid: [userJid],
               externalAdReply: {
-                title: '⚙️ Sistema Multibot',
-                body: 'Aviso del bot principal',
+                title: 'ꕥ New Subbot',
+                body: 'Se detecto un nuevo socket',
                 mediaType: 1,
                 thumbnailUrl: 'https://files.catbox.moe/72n6g8.jpg',
                 renderLargerThumbnail: true
