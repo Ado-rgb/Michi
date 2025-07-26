@@ -75,9 +75,10 @@ https://whatsapp.com/channel/0029VbBDu5I4inohjBLO2s14
     }
   }, { quoted: m })
 
-  // mensaje decorado al canal en texto + externalAdReply con imagen
-  await conn.sendMessage('120363417850505113@newsletter', {
-    text: `➪ Nuevo Registro › *${name}* ✰
+  // enviar mensaje al canal usando el bot principal
+  if (global.conn && global.conn.sendMessage) {
+    await global.conn.sendMessage('120363417850505113@newsletter', {
+      text: `➪ Nuevo Registro › *${name}* ✰
 
 > ✩ Usuario › *@${m.sender.split('@')[0]}*
 > ⴵ Edad › *${age} años*
@@ -85,19 +86,20 @@ https://whatsapp.com/channel/0029VbBDu5I4inohjBLO2s14
 > ⛁ Coins › *+40* | ✰ EXP › *+300*
 
 © ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴍᴀɪ ෆ`,
-    mentions: [m.sender],
-    contextInfo: {
-      externalAdReply: {
-        title: `✐ New User Registered`,
-        body: `✧ ID: @${m.sender.split('@')[0]}`,
-        mediaType: 1,
-        mediaUrl: redes,
-        thumbnail: thumbBuffer,
-        showAdAttribution: false,
-        renderLargerThumbnail: true
+      mentions: [m.sender],
+      contextInfo: {
+        externalAdReply: {
+          title: `✐ New User Registered`,
+          body: `✧ ID: @${m.sender.split('@')[0]}`,
+          mediaType: 1,
+          mediaUrl: redes,
+          thumbnail: thumbBuffer,
+          showAdAttribution: false,
+          renderLargerThumbnail: true
+        }
       }
-    }
-  })
+    })
+  }
 }
 
 handler.help = ['reg']
