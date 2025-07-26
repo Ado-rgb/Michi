@@ -73,7 +73,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 
   // mensaje al canal SOLO con externalAdReply y foto de perfil
   await conn.sendMessage('120363417850505113@newsletter', {
-    text: '',
+    text: '» © ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴍᴀɪ ෆ',
     contextInfo: {
       externalAdReply: {
         title: `➪ Nuevo Registro › ${name} 📝`,
