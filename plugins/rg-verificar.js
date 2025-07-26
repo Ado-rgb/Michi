@@ -45,6 +45,9 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 - ✰ Experiencia › *300*
 - ❖ Tokens › *20*
 
+> ᥫ᭡ Verifica tu registro aca :
+https://whatsapp.com/channel/0029VbBDu5I4inohjBLO2s14
+
 ⟣ ${dev}`
 
   await m.react('📩')
@@ -52,6 +55,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   const redes = channel // tu enlace del canal
   const thumbBuffer = await (await fetch(pp)).buffer()
   const userId = m.sender
+  const fecha = new Date(user.regTime).toLocaleDateString()
 
   // mensaje al chat donde se registró
   await conn.sendMessage(m.chat, {
@@ -71,13 +75,21 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     }
   }, { quoted: m })
 
-  // mensaje al canal SOLO con externalAdReply y foto de perfil
+  // mensaje decorado al canal en texto + externalAdReply con imagen
   await conn.sendMessage('120363417850505113@newsletter', {
-    text: '» © ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴍᴀɪ ෆ',
+    text: `➪ Nuevo Registro › *${name}* ✰
+
+> ✩ Usuario › *@${m.sender.split('@')[0]}*
+> ⴵ Edad › *${age} años*
+> ✿ Fecha › *${fecha}*
+> ⛁ Coins › *+40* | ✰ EXP › *+300*
+
+© ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴍᴀɪ ෆ`,
+    mentions: [m.sender],
     contextInfo: {
       externalAdReply: {
-        title: `➪ Nuevo Registro › ${name} 📝`,
-        body: `✩ Usuario › @${m.sender.split('@')[0]}\nⴵ Edad › ${age} años`,
+        title: `✐ New User Registered`,
+        body: `✧ ID: @${m.sender.split('@')[0]}`,
         mediaType: 1,
         mediaUrl: redes,
         thumbnail: thumbBuffer,
