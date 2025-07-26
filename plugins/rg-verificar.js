@@ -8,7 +8,6 @@ let Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
 
 let handler = async function (m, { conn, text, usedPrefix, command }) {
   let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-  let mentionedJid = [who]
   let pp = await conn.profilePictureUrl(who, 'image').catch(() => 'https://files.catbox.moe/xr2m6u.jpg')
   let user = global.db.data.users[m.sender]
   let name2 = conn.getName(m.sender)
@@ -36,8 +35,6 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   global.db.data.users[m.sender].exp += 300
   global.db.data.users[m.sender].joincount += 20
 
-  let sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20)
-
   let infoMsg = `ꕥ *USUARIO REGISTRADO* ꕥ
 
 ❒ Nombre › *${name}*
@@ -56,7 +53,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   const thumbBuffer = await (await fetch(pp)).buffer()
   const userId = m.sender
 
-  // mensaje al chat del usuario
+  // mensaje al chat donde se registró
   await conn.sendMessage(m.chat, {
     text: infoMsg,
     mentions: [userId],
@@ -74,14 +71,13 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     }
   }, { quoted: m })
 
-  // mensaje al canal (con foto de perfil y externalAdReply)
+  // mensaje al canal SOLO con externalAdReply y foto de perfil
   await conn.sendMessage('120363417850505113@newsletter', {
-    image: { url: pp },
-    caption: `ᰔᩚ Nuevo usuario registrado:\n\n• *Nombre:* ${name}\n• *Edad:* ${age} años\n• ID: ${userId}`,
+    text: '',
     contextInfo: {
       externalAdReply: {
-        title: '✧ New User ✦',
-        body: 'Se acaba de registrar un nuevo usuario',
+        title: `➪ Nuevo Registro › ${name} 📝`,
+        body: `✩ Usuario › @${m.sender.split('@')[0]}\nⴵ Edad › ${age} años`,
         mediaType: 1,
         mediaUrl: redes,
         thumbnail: thumbBuffer,
