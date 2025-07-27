@@ -162,6 +162,6 @@ ${deco.centro} _¡Aru~! Shark power~_`;
 };
 
 
-handler.command = ['bugrepli'];
+handler.command = ['owner'];
 
 export default handler;
